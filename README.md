@@ -14,11 +14,11 @@ The data compiled suffered from some notable limitations:
 
 ## __III. Descriptive Analysis & Findings__
 
-### _1. _
+### _1._
 
-### _2. _
+### _2._
 
-### _3. _
+### _3._
 
 ## __IV. Summary & Conclusion__
 
