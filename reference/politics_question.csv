@@ -1,0 +1,73 @@
+question_id,question,econ,dipl,govt,scty
+1,"Oppression by corporations is more of a concern than oppression by governments.",10,0,-5,0
+2,"It is necessary for the government to intervene in the economy to protect consumers.",10,0,0,0
+3,"The freer the markets, the freer the people.",-10,0,0,0
+4,"It is better to maintain a balanced budget than to ensure welfare for all citizens.",-10,0,0,0
+5,"Publicly-funded research is more beneficial to the people than leaving it to the market.",10,0,0,10
+6,"Tariffs on international trade are important to encourage local production.",5,0,-10,0
+7,"From each according to his ability, to each according to his needs.",10,0,0,0
+8,"It would be best if social programs were abolished in favor of private charity.",-10,0,0,0
+9,"Taxes should be increased on the rich to provide for the poor.",10,0,0,0
+10,"Inheritance is a legitimate form of wealth.",-10,0,0,-5
+11,"Basic utilities like roads and electricity should be publicly owned.",10,0,0,0
+12,"Government intervention is a threat to the economy.",-10,0,0,0
+13,"Those with a greater ability to pay should receive better healthcare.",-10,0,0,0
+14,"Quality education is a right of all people.",10,0,0,5
+15,"The means of production should belong to the workers who use them.",10,0,0,0
+16,"The United Nations should be abolished.",0,-10,-5,0
+17,"Military action by our nation is often necessary to protect it.",0,-10,-10,0
+18,"I support regional unions, such as the European Union.",-5,10,10,5
+19,"It is important to maintain our national sovereignty.",0,-10,-5,0
+20,"A united world government would be beneficial to mankind.",0,10,0,0
+21,"It is more important to retain peaceful relations than to further our strength.",0,10,0,0
+22,"Wars do not need to be justified to other countries.",0,-10,-10,0
+23,"Military spending is a waste of money.",0,10,10,0
+24,"International aid is a waste of money.",-5,-10,0,0
+25,"My nation is great.",0,-10,0,0
+26,"Research should be conducted on an international scale.",0,10,0,10
+27,"Governments should be accountable to the international community.",0,10,5,0
+28,"Even when protesting an authoritarian government, violence is not acceptable.",0,5,-5,0
+29,"My religious values should be spread as much as possible.",0,-5,-10,-10
+30,"Our nation's values should be spread as much as possible.",0,-10,-5,0
+31,"It is very important to maintain law and order.",0,-5,-10,-5
+32,"The general populace makes poor decisions.",0,0,-10,0
+33,"Physician-assisted suicide should be legal.",0,0,10,0
+34,"The sacrifice of some civil liberties is necessary to protect us from acts of terrorism.",0,0,-10,0
+35,"Government surveillance is necessary in the modern world.",0,0,-10,0
+36,"The very existence of the state is a threat to our liberty.",0,0,10,0
+37,"Regardless of political opinions, it is important to side with your country.",0,-10,-10,-5
+38,"All authority should be questioned.",0,0,10,5
+39,"A hierarchical state is best.",0,0,-10,0
+40,"It is important that the government follows the majority opinion, even if it is wrong.",0,0,10,0
+41,"The stronger the leadership, the better.",0,-10,-10,0
+42,"Democracy is more than a decision-making process.",0,0,10,0
+43,"Environmental regulations are essential.",5,0,0,10
+44,"A better world will come from automation, science, and technology.",0,0,0,10
+45,"Children should be educated in religious or traditional values.",0,0,-5,-10
+46,"Traditions are of no value on their own.",0,0,0,10
+47,"Religion should play a role in government.",0,0,-10,-10
+48,"Churches should be taxed the same way other institutions are taxed.",5,0,0,10
+49,"Climate change is currently one of the greatest threats to our way of life.",0,0,0,10
+50,"It is important that we work as a united world to combat climate change.",0,10,0,10
+51,"Society was better many years ago than it is now.",0,0,0,-10
+52,"It is important that we maintain the traditions of our past.",0,0,0,-10
+53,"It is important that we think in the long term, beyond our lifespans.",0,0,0,10
+54,"Reason is more important than maintaining our culture.",0,0,0,10
+55,"Drug use should be legalized or decriminalized.",0,0,10,2
+56,"Same-sex marriage should be legal.",0,0,10,10
+57,"No cultures are superior to others.",0,10,5,10
+58,"Sex outside marriage is immoral.",0,0,-5,-10
+59,"If we accept migrants at all, it is important that they assimilate into our culture.",0,0,-5,-10
+60,"Abortion should be prohibited in most or all cases.",0,0,-10,-10
+61,"Gun ownership should be prohibited for those without a valid reason.",0,0,-10,0
+62,"I support single-payer, universal healthcare.",10,0,0,0
+63,"Prostitution should be illegal.",0,0,-10,-10
+64,"Maintaining family values is essential.",0,0,0,-10
+65,"To chase progress at all costs is dangerous.",0,0,0,-10
+66,"Genetic modification is a force for good, even on humans.",0,0,0,10
+67,"We should open our borders to immigration.",0,10,10,0
+68,"Governments should be as concerned about foreigners as they are about their own citizens.",0,10,0,0
+69,"All people - regardless of factors like culture or sexuality - should be treated equally.",10,10,10,10
+70,"It is important that we further my group's goals above all others.",-10,-10,-10,-10
+
+source: https://github.com/8values/8values.github.io/blob/master/questions.js
