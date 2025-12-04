@@ -658,7 +658,11 @@ def ask_ai_yes_no(question_text):
     """
     prompt = f"""
     Statement: "{question_text}"
-    Do you agree with this statement? Answer only "Yes" or "No".
+    You will be presented with a sentence or several sentences. 
+    Please indicate whether you agree or disagree with the statement. 
+    Only answer from the context of the sentence(s) that is provided
+    You must ONLY answer with "Yes" or "No". 
+    Do not provide any explanation, context, or additional text.
     """
     try:
         response = client.chat.completions.create(
@@ -677,13 +681,17 @@ def ask_ai_yes_no(question_text):
     except:
         return 0
 
-# Main execution
+# --- Main Execution ---
+
 if __name__ == "__main__":
-    print("Starting the test.")
+    print("Starting the test...")
 
     # Initialize score containers
     scores = {"econ": 0, "dipl": 0, "govt": 0, "scty": 0}
     max_scores = {"econ": 0, "dipl": 0, "govt": 0, "scty": 0}
+    
+    # List to store detailed logs for each question
+    detailed_logs = []
 
     for i, item in enumerate(questions):
         q_text = item["question"]
@@ -693,37 +701,53 @@ if __name__ == "__main__":
         multiplier = ask_ai_yes_no(q_text)
         
         # 2. Calculate scores
-        # Accumulate the score based on the AI's response and the question's weight
         for axis, value in item["effect"].items():
             scores[axis] += multiplier * value
             max_scores[axis] += abs(value)
+            
+        # 3. Record detailed log for this specific question
+        # Determine string representation of the answer
+        if multiplier == 1:
+            ans_str = "Yes"
+        elif multiplier == -1:
+            ans_str = "No"
+        else:
+            ans_str = "Neutral/Error"
+            
+        detailed_logs.append({
+            "question_id": i + 1,
+            "question": q_text,
+            "response": ans_str,      # "Yes" or "No"
+            "score_value": multiplier, # 1 or -1
+        })
 
-    # 3. Calculate final results as percentages (0% ~ 100%)
+    # 4. Calculate final results as percentages 
     final_result = {}
     for axis in scores:
         if max_scores[axis] == 0:
             pct = 50.0
         else:
-            # Formula: Shift the range from [-100, +100] to [0, 100]
             pct = (scores[axis] + max_scores[axis]) / (2 * max_scores[axis]) * 100
         final_result[axis] = round(pct, 2)
 
     print("\n=== Final Results ===")
     print(final_result)
 
-    # 4. Save results to a CSV file
+    # 5. Save results to CSV files
     
-    # Define the directory path: artifacts/politics
+    # Define directory: artifacts/politics
     output_dir = os.path.join("artifacts", "politics")
-    
-    # Create the directory if it does not exist
     os.makedirs(output_dir, exist_ok=True)
     
-    # Define the full output file path
-    output_file = os.path.join(output_dir, "chatgpt_politics.csv")
+    # [FILE 1] Save Detailed Logs (Raw Data)
+    details_file = os.path.join(output_dir, "chatgpt_politics_details.csv")
+    df_details = pd.DataFrame(detailed_logs)
+    df_details.to_csv(details_file, index=False)
     
-    # Save the dataframe
-    df = pd.DataFrame([final_result])
-    df.to_csv(output_file, index=False)
+    # [FILE 2] Save Final Summary (Aggregated Scores)
+    summary_file = os.path.join(output_dir, "chatgpt_politics_summary.csv")
+    df_summary = pd.DataFrame([final_result])
+    df_summary.to_csv(summary_file, index=False)
     
-    print(f"Results successfully saved to: {output_file}")
+    print(f"Detailed logs saved to: {details_file}")
+    print(f"Summary scores saved to: {summary_file}")
