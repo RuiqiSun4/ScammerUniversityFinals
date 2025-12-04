@@ -1,2 +1,4 @@
-requests==2.27.1  
-pandas>=2.0.0
+pandas==2.2.2
+openai==1.52.0
+python-dotenv==1.0.1
+httpx<0.28.0
