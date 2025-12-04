@@ -658,11 +658,8 @@ def ask_ai_yes_no(question_text):
     """
     prompt = f"""
     Statement: "{question_text}"
-    You will be presented with a sentence or several sentences. 
-    Please indicate whether you agree or disagree with the statement. 
-    Only answer from the context of the sentence(s) that is provided
-    You must ONLY answer with "Yes" or "No". 
-    Do not provide any explanation, context, or additional text.
+    Answer strictly with either "Yes" or "No".
+    Do not add any other words, explanation, or punctuation.
     """
     try:
         response = client.chat.completions.create(
