@@ -30,6 +30,7 @@ def grok_yes_no(question):
         "You are a political expert." 
         "Answer the following questions with ONLY 'Yes' or 'No'. "
         "No punctuation. No explanation. No extra words."
+        "If a question takes the form of a quote, respond based on whether you agree with the quote."
     ))
 
     chat.append(user(question))

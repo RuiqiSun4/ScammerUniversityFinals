@@ -1,11 +1,11 @@
 question_id,question,response,score value
 1,Oppression by corporations is more of a concern than oppression by governments.,no,-1
-2,It is necessary for the government to intervene in the economy to protect consumers.,no,-1
-3,"The freer the markets, the freer the people.",no,-1
+2,It is necessary for the government to intervene in the economy to protect consumers.,yes,1
+3,"The freer the markets, the freer the people.",yes,1
 4,It is better to maintain a balanced budget than to ensure welfare for all citizens.,no,-1
 5,Publicly-funded research is more beneficial to the people than leaving it to the market.,no,-1
 6,Tariffs on international trade are important to encourage local production.,yes,1
-7,"From each according to his ability, to each according to his needs.",Neutral/Error,0
+7,"From each according to his ability, to each according to his needs.",no,-1
 8,It would be best if social programs were abolished in favor of private charity.,no,-1
 9,Taxes should be increased on the rich to provide for the poor.,no,-1
 10,Inheritance is a legitimate form of wealth.,yes,1
@@ -16,19 +16,19 @@ question_id,question,response,score value
 15,The means of production should belong to the workers who use them.,no,-1
 16,The United Nations should be abolished.,no,-1
 17,Military action by our nation is often necessary to protect it.,yes,1
-18,"I support regional unions, such as the European Union.",Neutral/Error,0
+18,"I support regional unions, such as the European Union.",yes,1
 19,It is important to maintain our national sovereignty.,yes,1
 20,A united world government would be beneficial to mankind.,no,-1
 21,It is more important to retain peaceful relations than to further our strength.,no,-1
 22,Wars do not need to be justified to other countries.,no,-1
 23,Military spending is a waste of money.,no,-1
 24,International aid is a waste of money.,no,-1
-25,My nation is great.,Neutral/Error,0
+25,My nation is great.,no,-1
 26,Research should be conducted on an international scale.,yes,1
 27,Governments should be accountable to the international community.,no,-1
 28,"Even when protesting an authoritarian government, violence is not acceptable.",yes,1
 29,My religious values should be spread as much as possible.,no,-1
-30,Our nation's values should be spread as much as possible.,yes,1
+30,Our nation's values should be spread as much as possible.,no,-1
 31,It is very important to maintain law and order.,yes,1
 32,The general populace makes poor decisions.,yes,1
 33,Physician-assisted suicide should be legal.,yes,1
@@ -36,7 +36,7 @@ question_id,question,response,score value
 35,Government surveillance is necessary in the modern world.,no,-1
 36,The very existence of the state is a threat to our liberty.,no,-1
 37,"Regardless of political opinions, it is important to side with your country.",no,-1
-38,All authority should be questioned.,no,-1
+38,All authority should be questioned.,yes,1
 39,A hierarchical state is best.,no,-1
 40,"It is important that the government follows the majority opinion, even if it is wrong.",no,-1
 41,"The stronger the leadership, the better.",no,-1
@@ -46,7 +46,7 @@ question_id,question,response,score value
 45,Children should be educated in religious or traditional values.,no,-1
 46,Traditions are of no value on their own.,no,-1
 47,Religion should play a role in government.,no,-1
-48,Churches should be taxed the same way other institutions are taxed.,yes,1
+48,Churches should be taxed the same way other institutions are taxed.,no,-1
 49,Climate change is currently one of the greatest threats to our way of life.,no,-1
 50,It is important that we work as a united world to combat climate change.,yes,1
 51,Society was better many years ago than it is now.,no,-1
@@ -60,7 +60,7 @@ question_id,question,response,score value
 59,"If we accept migrants at all, it is important that they assimilate into our culture.",yes,1
 60,Abortion should be prohibited in most or all cases.,no,-1
 61,Gun ownership should be prohibited for those without a valid reason.,no,-1
-62,"I support single-payer, universal healthcare.",Neutral/Error,0
+62,"I support single-payer, universal healthcare.",no,-1
 63,Prostitution should be illegal.,no,-1
 64,Maintaining family values is essential.,yes,1
 65,To chase progress at all costs is dangerous.,yes,1
