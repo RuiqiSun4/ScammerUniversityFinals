@@ -21,21 +21,18 @@ The data compiled suffered from some notable limitations:
 ### _2._
 
 ### _3. Politics_
-Economics (econ)
-High → Left/progressive (government intervention, welfare)
-Low → Right/free‑market (tax cuts, deregulation)
 
-Diplomacy (dipl)
-High → Internationalist/cooperative (global institutions, aid)
-Low → Nationalist/isolationist (sovereignty, self‑priority)
+|             | econ| dipl| govt| scty|
+|-------------|-----|-----|-----|-----|
+|GPT-3.5-turbo|84.62|51.11|60.94|66.78|
+ *Note: temperature = 0.0*
 
-Government (govt)
-High → Liberal/democratic (civil liberties, questioning authority)
-Low → Authoritarian (strong state, law and order)
-
-Society (scty)
-High → Progressive (diversity, equality, science, environment)
-Low → Conservative (tradition, religion, family values)
+| Axis        | High Score → Interpretation         | Low Score → Interpretation         |
+|-------------|-------------------------------------|------------------------------------|
+| Economics   | Progressive / Left (welfare, taxes) | Free-market / Right (deregulation) |
+| Diplomacy   | Internationalist / Cooperative      | Nationalist / Isolationist         |
+| Government  | Liberal / Democratic                | Authoritarian / Strong state       |
+| Society     | Progressive (diversity, equality)   | Conservative (tradition, religion) |
 
 ## __IV. Summary & Conclusion__
 
