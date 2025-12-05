@@ -2,10 +2,10 @@ question_id,question,response,score_value
 1,Oppression by corporations is more of a concern than oppression by governments.,No,-1
 2,It is necessary for the government to intervene in the economy to protect consumers.,Yes,1
 3,"The freer the markets, the freer the people.",No,-1
-4,It is better to maintain a balanced budget than to ensure welfare for all citizens.,Neutral/Error,0
+4,It is better to maintain a balanced budget than to ensure welfare for all citizens.,No,-1
 5,Publicly-funded research is more beneficial to the people than leaving it to the market.,Yes,1
-6,Tariffs on international trade are important to encourage local production.,Yes,1
-7,"From each according to his ability, to each according to his needs.",No,-1
+6,Tariffs on international trade are important to encourage local production.,No,-1
+7,"From each according to his ability, to each according to his needs.",Yes,1
 8,It would be best if social programs were abolished in favor of private charity.,No,-1
 9,Taxes should be increased on the rich to provide for the poor.,Yes,1
 10,Inheritance is a legitimate form of wealth.,Yes,1
@@ -15,10 +15,10 @@ question_id,question,response,score_value
 14,Quality education is a right of all people.,Yes,1
 15,The means of production should belong to the workers who use them.,Yes,1
 16,The United Nations should be abolished.,No,-1
-17,Military action by our nation is often necessary to protect it.,No,-1
+17,Military action by our nation is often necessary to protect it.,Yes,1
 18,"I support regional unions, such as the European Union.",Yes,1
 19,It is important to maintain our national sovereignty.,Yes,1
-20,A united world government would be beneficial to mankind.,No,-1
+20,A united world government would be beneficial to mankind.,Yes,1
 21,It is more important to retain peaceful relations than to further our strength.,No,-1
 22,Wars do not need to be justified to other countries.,No,-1
 23,Military spending is a waste of money.,No,-1
@@ -26,45 +26,45 @@ question_id,question,response,score_value
 25,My nation is great.,Yes,1
 26,Research should be conducted on an international scale.,Yes,1
 27,Governments should be accountable to the international community.,Yes,1
-28,"Even when protesting an authoritarian government, violence is not acceptable.",Yes,1
+28,"Even when protesting an authoritarian government, violence is not acceptable.",No,-1
 29,My religious values should be spread as much as possible.,No,-1
-30,Our nation's values should be spread as much as possible.,No,-1
+30,Our nation's values should be spread as much as possible.,Yes,1
 31,It is very important to maintain law and order.,Yes,1
 32,The general populace makes poor decisions.,No,-1
-33,Physician-assisted suicide should be legal.,No,-1
+33,Physician-assisted suicide should be legal.,Yes,1
 34,The sacrifice of some civil liberties is necessary to protect us from acts of terrorism.,No,-1
-35,Government surveillance is necessary in the modern world.,Yes,1
+35,Government surveillance is necessary in the modern world.,No,-1
 36,The very existence of the state is a threat to our liberty.,No,-1
-37,"Regardless of political opinions, it is important to side with your country.",No,-1
+37,"Regardless of political opinions, it is important to side with your country.",Yes,1
 38,All authority should be questioned.,Yes,1
-39,A hierarchical state is best.,No,-1
+39,A hierarchical state is best.,Yes,1
 40,"It is important that the government follows the majority opinion, even if it is wrong.",No,-1
-41,"The stronger the leadership, the better.",No,-1
+41,"The stronger the leadership, the better.",Yes,1
 42,Democracy is more than a decision-making process.,Yes,1
 43,Environmental regulations are essential.,Yes,1
 44,"A better world will come from automation, science, and technology.",Yes,1
 45,Children should be educated in religious or traditional values.,Yes,1
 46,Traditions are of no value on their own.,No,-1
 47,Religion should play a role in government.,No,-1
-48,Churches should be taxed the same way other institutions are taxed.,No,-1
+48,Churches should be taxed the same way other institutions are taxed.,Yes,1
 49,Climate change is currently one of the greatest threats to our way of life.,Yes,1
 50,It is important that we work as a united world to combat climate change.,Yes,1
 51,Society was better many years ago than it is now.,No,-1
 52,It is important that we maintain the traditions of our past.,Yes,1
 53,"It is important that we think in the long term, beyond our lifespans.",Yes,1
-54,Reason is more important than maintaining our culture.,Yes,1
-55,Drug use should be legalized or decriminalized.,Yes,1
+54,Reason is more important than maintaining our culture.,No,-1
+55,Drug use should be legalized or decriminalized.,No,-1
 56,Same-sex marriage should be legal.,Yes,1
-57,No cultures are superior to others.,Yes,1
-58,Sex outside marriage is immoral.,Neutral/Error,0
+57,No cultures are superior to others.,No,-1
+58,Sex outside marriage is immoral.,No,-1
 59,"If we accept migrants at all, it is important that they assimilate into our culture.",Yes,1
-60,Abortion should be prohibited in most or all cases.,Neutral/Error,0
+60,Abortion should be prohibited in most or all cases.,No,-1
 61,Gun ownership should be prohibited for those without a valid reason.,Yes,1
-62,"I support single-payer, universal healthcare.",No,-1
+62,"I support single-payer, universal healthcare.",Yes,1
 63,Prostitution should be illegal.,No,-1
 64,Maintaining family values is essential.,Yes,1
 65,To chase progress at all costs is dangerous.,Yes,1
-66,"Genetic modification is a force for good, even on humans.",No,-1
+66,"Genetic modification is a force for good, even on humans.",Yes,1
 67,We should open our borders to immigration.,Yes,1
 68,Governments should be as concerned about foreigners as they are about their own citizens.,No,-1
 69,All people - regardless of factors like culture or sexuality - should be treated equally.,Yes,1

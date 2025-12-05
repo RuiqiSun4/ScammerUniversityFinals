@@ -663,7 +663,7 @@ def ask_ai_yes_no(question_text):
     """
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.0
         )
