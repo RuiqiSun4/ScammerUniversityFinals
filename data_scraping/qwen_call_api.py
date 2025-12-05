@@ -1,37 +1,45 @@
-# kimi_final_qwen_yes_no.py
 import json
 import csv
 import os
-import re
 from openai import OpenAI
+import numpy as np
+from dotenv import load_dotenv
 
-# ========================= 配置 =========================
-PROMPT_FILE_PATH = "prompts/prompts_test.json"
-OUTPUT_FILE_PATH = "responses.csv"
-
+PROMPT_FILE_PATH = "prompts/prompts.json"
+OUTPUT_FILE_PATH = "artifacts/qwen_results.csv"
+NUM_ROUNDS = 50
+load_dotenv()
 client = OpenAI(
-    api_key="7FVf50oJqW8p0fIE3yR6c6xm8UciZcjZ",
-    base_url="https://api.deepinfra.com/v1/openai",
+    api_key = os.getenv("WUYI_API_KEY"),
+    base_url = os.getenv("WUYI_BASE_URL"),
 )
 
-# 换成你验证能用的最听话模型
 MODEL_NAME = "Qwen/Qwen3-Next-80B-A3B-Instruct"
 
-
-# ========================= 万能 Yes/No 提取 =========================
-def force_yes_no(text: str) -> str:
+def force_yes_no(text: str) -> int:
+    """
+    Extract text from the result, record it as 1 if it is Yes, and as 0 if it is No.。
+    Returns:
+        int:
+            - 1: "Yes"。
+            - 0: "No"。
+            - -1: Error/Uncertain
+    """
     text = text.strip().upper().replace(" ", "")
     if text.startswith("YES") or "YES" in text:
-        return "Yes"
+        return 1
     elif text.startswith("NO") or "NO" in text:
-        return "No"
+        return 0
     else:
         first_char = text[:1]
-        return "Yes" if first_char == "Y" else "No" if first_char == "N" else "Uncertain"
+        if first_char == "Y":
+            return 1
+        elif first_char == "N":
+            return 0
+        else:
+            return -1
 
-
-# ========================= 核心函数 =========================
-def get_answer(question: str, constraint: str) -> str:
+def get_answer(question: str, constraint: str) -> int:
     prompt = f"""{constraint}
 
 Statement: {question}
@@ -42,55 +50,76 @@ Answer with only "Yes" or "No" right now:"""
         completion = client.chat.completions.create(
             model=MODEL_NAME,
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=2,  # 强行只让它出 1~2 个 token
+            max_tokens=2,
             temperature=1.0,
-            top_p=0.01,
+            top_p=1.0,
         )
         raw = completion.choices[0].message.content
         return force_yes_no(raw)
 
     except Exception as e:
-        return f"ERROR: {e}"
+        return -1
 
 
-# ========================= 主程序 =========================
-def main():
-    print(f"开始批量测试（模型：{MODEL_NAME}）\n")
+def call_qwen():
+    print(f"Starting batch test (Model：{MODEL_NAME}，repeated for {NUM_ROUNDS} rounds)\n")
 
     if not os.path.exists(PROMPT_FILE_PATH):
-        print(f"文件不存在：{PROMPT_FILE_PATH}")
+        print(f"File does not exist：{PROMPT_FILE_PATH}")
         return
 
     with open(PROMPT_FILE_PATH, "r", encoding="utf-8") as f:
         prompts = json.load(f)
 
-    results = []
-    for i, item in enumerate(prompts, 1):
+    num_questions = len(prompts)
+
+    all_answers_by_qid = {item["id"]: [None] * NUM_ROUNDS for item in prompts}
+
+    print(f"There are a total of {num_questions} questions.")
+    print("Starting Loop Query")
+
+    for round_num in range(1, NUM_ROUNDS + 1):
+        print(f"\n Running Round {round_num:2d}/{NUM_ROUNDS}")
+        for i, item in enumerate(prompts):
+            qid = item["id"]
+            qtext = item["question_text"]
+            constraint = item["constraint"]
+            ans_code = get_answer(qtext, constraint)
+            all_answers_by_qid[qid][round_num - 1] = ans_code
+            ans_str = "Yes (1)" if ans_code == 1 else "No (0)" if ans_code == 0 else "Error (-1)"
+            print(f"  Q{i + 1:02d} ({qid}) -> {ans_str}")
+    final_results = []
+    for item in prompts:
         qid = item["id"]
-        dim = item["dimension"]
-        qtext = item["question_text"]
-        constraint = item["constraint"]
-
-        print(f"{i:2d}/10 {qid} → ", end="")
-        ans = get_answer(qtext, constraint)
-        print(ans)
-
-        results.append({
+        answers = all_answers_by_qid[qid]
+        valid_answers = [a for a in answers if a in (0, 1)]
+        if valid_answers:
+            yes_count = sum(valid_answers)
+            total_valid_rounds = len(valid_answers)
+            yes_probability = yes_count / total_valid_rounds
+            variance = np.var(np.array(valid_answers, dtype=np.float64))
+        else:
+            yes_probability = float('nan')
+            variance = float('nan')
+        result_row = {
             "id": qid,
-            "dimension": dim,
-            "question_text": qtext,
-            "model_answer": ans
-        })
-
-    # 保存
-    keys = ["id", "dimension", "question_text", "model_answer"]
+            "dimension": item.get("dimension", "N/A"),
+            "question_text": item["question_text"],
+        }
+        for round_num, ans_code in enumerate(answers, 1):
+            result_row[f"Round_{round_num}"] = ans_code
+        result_row["Yes_Probability"] = yes_probability
+        result_row["Variance"] = variance
+        final_results.append(result_row)
+    keys = ["id", "dimension", "question_text"]
+    keys.extend([f"Round_{i}" for i in range(1, NUM_ROUNDS + 1)])
+    keys.extend(["Yes_Probability", "Variance"])
     with open(OUTPUT_FILE_PATH, "w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=keys)
         w.writeheader()
-        w.writerows(results)
-
-    print(f"\n全部完成！结果已保存到 {OUTPUT_FILE_PATH}")
+        w.writerows(final_results)
+    print(f"\n All complete! Results saved to {OUTPUT_FILE_PATH}")
 
 
 if __name__ == "__main__":
-    main()
+    call_qwen()
