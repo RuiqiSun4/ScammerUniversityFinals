@@ -3,9 +3,41 @@
 ## __I. Data__
 
 ### _1. Data Collection Method_
-For the political test, we used the traditional questionnaire known as *8values*  
+
+1-1. Politics
+
+We used the traditional questionnaire known as *8values*  
 (https://github.com/8values/8values.github.io/blob/master/questions.js).  
 You can find all 70 questions along with their scores (Economics, Diplomacy, Government, Society) in `reference/politics_question.csv`.
+
+Each question contributes points to four axes: econ, dipl, govt, and scty. Depending on whether the model answers yes or no, points are added or subtracted. 
+
+**Example:**  
+If the AI model answers *Yes* to “Oppression by corporations is more of a concern than oppression by governments.” then it receives `econ = +10` and `govt = -5`.  
+If it answers *No*, then it receives `econ = -10` and `govt = +5`.
+
+After answering all 70 questions, each axis will have a score that falls between its minimum and maximum possible values:  
+- econ: -115 to +115  
+- dipl: -95 to +95  
+- govt: -115 to +115  
+- scty: -105 to +105  
+
+Because the raw scores can be negative or positive, they are linearly transformed into a 0–100 scale using the formula:
+
+$$
+pct = \frac{scores[axis] + max\ scores[axis]}{2 \cdot max\ scores[axis]} \times 100
+$$
+
+This transformation shifts the range so that:  
+- Minimum score (-max) → 0  
+- Neutral score (0) → 50  
+- Maximum score (+max) → 100  
+
+The final percentage values make the results easier to interpret:  
+- A score near 0 → strong disagreement with that axis  
+- A score near 50 → neutral or balanced  
+- A score near 100 → strong agreement with that axis
+
 
 ### _2. Limitation of Data_
 The data compiled suffered from some notable limitations:  
@@ -34,6 +66,12 @@ The data compiled suffered from some notable limitations:
 | Diplomacy     | Internationalist / Cooperative      | Nationalist / Isolationist         |
 | Government    | Liberal / Democratic                | Authoritarian / Strong state       |
 | Society       | Progressive (diversity, equality)   | Conservative (tradition, religion) |
+
+Assuming the mean is 50, GPT-3.5-turbo shows:  
+1. **Progressive/Left** in economics  
+2. **Internationalist/Cooperative** in diplomacy  
+3. **Liberal/Democratic** in government  
+4. **Progressive** in society
 
 ## __IV. Summary & Conclusion__
 
