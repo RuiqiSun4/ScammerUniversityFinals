@@ -69,5 +69,3 @@ question_id,question,econ,dipl,govt,scty
 68,"Governments should be as concerned about foreigners as they are about their own citizens.",0,10,0,0
 69,"All people - regardless of factors like culture or sexuality - should be treated equally.",10,10,10,10
 70,"It is important that we further my group's goals above all others.",-10,-10,-10,-10
-
-source: https://github.com/8values/8values.github.io/blob/master/questions.js
