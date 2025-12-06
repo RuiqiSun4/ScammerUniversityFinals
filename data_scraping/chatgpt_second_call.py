@@ -2,14 +2,17 @@ import os
 import pandas as pd
 import json
 import csv
+import asyncio
 from openai import OpenAI
+from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from tqdm import tqdm
 
 PROMPT_FILE_PATH = "prompts/prompts.json"
-OUTPUT_FILE_PATH = "artifacts/chatgpt_5.1_.csv"
+OUTPUT_FILE_PATH = "artifacts/chatgpt_4.1_.csv"
 NUM_ROUNDS = 50
 MODEL_NAME = "gpt-4.1"
+CONCURRENCY = 50
 
 load_dotenv()
 
@@ -17,7 +20,7 @@ key = os.getenv("OpenAI_API_KP_Key")
 if not key:
     raise ValueError("No key found")
 
-client = OpenAI(api_key=key)
+client = AsyncOpenAI(api_key=key)
 
 def yes_no(text: str) -> int:
    """
@@ -33,47 +36,52 @@ def yes_no(text: str) -> int:
        return 0
    return -1
 
-def main():
-    with open(PROMPT_FILE_PATH, "r", encoding="utf-8") as f:
+async def ask_prompts(question: str, constraint: str, semaphore: asyncio.Semaphore) -> int:
+    async with semaphore:
+        messages = [{
+            "role": "system", "content":
+            ("Respond using exactly one word. Only output the word 'Yes' or 'No' in response. Do not explain.")},
+            {"role": "user", "content": f"{constraint}\n\nStatement: {question}\n\nAnswer with only 'Yes' or 'No' right now:"}]
+        
+
+        try:
+            resp = await client.chat.completions.create(
+                model=MODEL_NAME,
+                messages=messages,
+                max_completion_tokens=5,
+                temperature=1.0,
+                )
+            return yes_no(resp.choices[0].message.content)
+        except Exception:
+            return -1
+        
+async def main():
+    with open(PROMPT_FILE_PATH, "r", encoding = "utf-8") as f:
         prompts = json.load(f)
 
-    os.makedirs(os.path.dirname(OUTPUT_FILE_PATH), exist_ok=True)
-
+    os.makedirs(os.path.dirname(OUTPUT_FILE_PATH), exist_ok = True)
     rows = []
 
-    for item in tqdm(prompts, desc="Questions", unit="q"):
+    for item in tqdm(prompts, desc = "Questions", unit = "q"):
         qid = item["id"]
         question = item["question_text"]
         constraint = item["constraint"]
         dimension = item.get("dimension", "N/A")
 
+        semaphore = asyncio.Semaphore(CONCURRENCY)
+
+        task = [ask_prompts(question, constraint, semaphore) for _ in range(NUM_ROUNDS)]
+        
         answers = []
+        for coro in tqdm(
+            asyncio.as_completed(task),
+            total = NUM_ROUNDS,
+            desc = f"Q{qid}",
+            unit = "call",
+            leave = False,
+        ): 
+            answers.append(await coro)
 
-        for r in range(1, NUM_ROUNDS + 1):
-
-            messages = [{"role": "system", "content": 
-            "Respond using exactly one word. Only output the word 'Yes' or 'No' in response. Do not explain."
-            }, 
-            {"role": "user", "content":
-             f"{constraint}\n\n{question}"}
-            ]
-                
-            try:
-                resp = client.chat.completions.create(
-                    model=MODEL_NAME,
-                    messages=messages,
-                    max_completion_tokens=5,
-                    temperature=1.0,
-                )
-                raw = resp.choices[0].message.content
-                code = yes_no(raw)
-                answers.append(code)
-                print(f"  Round {r}: {raw}")
-            except Exception as e:
-                print(f"  Error (Q{qid}, round {r}): {e}")
-                answers.append(-1)
-
-    
         valid = [a for a in answers if a in (0, 1)]
         if valid:
             yes_prob = sum(valid) / len(valid)
@@ -110,6 +118,5 @@ def main():
 
     print(f"\nSaved results to {OUTPUT_FILE_PATH}")
 
-
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
