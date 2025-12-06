@@ -4,6 +4,7 @@ import json
 import csv
 from openai import OpenAI
 from dotenv import load_dotenv
+from tqdm import tqdm
 
 PROMPT_FILE_PATH = "prompts/prompts.json"
 OUTPUT_FILE_PATH = "artifacts/chatgpt_5.1_.csv"
@@ -40,13 +41,12 @@ def main():
 
     rows = []
 
-    for item in prompts:
+    for item in tqdm(prompts, desc="Questions", unit="q"):
         qid = item["id"]
         question = item["question_text"]
         constraint = item["constraint"]
         dimension = item.get("dimension", "N/A")
 
-        print(f"\nQuestion {qid} ({dimension}): {question}")
         answers = []
 
         for r in range(1, NUM_ROUNDS + 1):
