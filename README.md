@@ -83,6 +83,8 @@ Assuming the mean is 50, GPT-3.5-turbo shows:
 
 Further research could be done regarding (but not limited to) the following areas:  
 
+You can compare AI model responses across different versions. Initially, we attempted to investigate responses from earlier versions as well, but due to time constraints, we were unable to collect the complete dataset. For reference, see `data_scraping/gpt3_5_call.api.py` and the corresponding incomplete results (`artifacts/gpt3_5_results.csv`), which contain 340 out of 975 questions.
+
 ## __VI. Instruction to Rerun__ 
 
 ### _1. Requirements_
