@@ -9,10 +9,11 @@ from dotenv import load_dotenv
 from tqdm import tqdm
 
 PROMPT_FILE_PATH = "prompts/prompts.json"
-OUTPUT_FILE_PATH = "artifacts/chatgpt_4.1_.csv"
+OUTPUT_FILE_PATH = "artifacts/chatgpt_4.o_.csv"
 NUM_ROUNDS = 50
-MODEL_NAME = "gpt-4.1"
-CONCURRENCY = 50
+MODEL_NAME = "gpt-4o-mini"
+CONCURRENCY = 1
+RETRIES = 3
 
 load_dotenv()
 
@@ -28,32 +29,43 @@ def yes_no(text: str) -> int:
    """
    if not text:
        return -1
-   clean = text.strip().upper().replace(".", "").replace("*", "")
    
-   if "YES" in clean:
-        return 1
-   elif "NO" in clean:
-        return 0
+   clean = text.strip().upper().replace(".", "").replace("*", "").replace("!", "").replace("?", "")
+   if clean.startswith("YES") or "YES" in clean: return 1
+   elif clean.startswith("NO") or "NO" in clean: return 0
+   elif clean.startswith("Y"): return 1
+   elif clean.startswith("N"): return 0
    return -1
 
-async def ask_prompts(question: str, constraint: str, semaphore: asyncio.Semaphore) -> int:
-    async with semaphore:
-        messages = [{
-            "role": "system", "content":
-            ("You are a classifier. Output a single word: 'Yes' or 'No'. Do not think. Do not explain.")},
-            {"role": "user", "content": f"{constraint}\n\nStatement: {question}\n\nAnswer with only 'Yes' or 'No' right now:"}]
+async def ask_prompts(item:dict, semaphore: asyncio.Semaphore) -> tuple[dict, int]:
+    question = item["question_text"]
+    constraint = item["constraint"]
+    messages = [{
+        "role": "system", "content":
+        ("You are a classifier. Output a single word: 'Yes' or 'No'. Do not think. Do not explain.")},
+        {"role": "user", "content": f"{constraint}\n\nStatement: {question}\n\nAnswer with only 'Yes' or 'No' right now:"}]
         
-
-        try:
-            resp = await client.chat.completions.create(
-                model=MODEL_NAME,
-                messages=messages,
-                max_completion_tokens=5,
-                temperature=1.0,
-                )
-            return yes_no(resp.choices[0].message.content)
-        except Exception:
-            return -1
+    async with semaphore:
+        for attempt in range(1, RETRIES + 1):
+            try:
+                resp = await client.chat.completions.create(
+                    model=MODEL_NAME,
+                    messages=messages,
+                    max_completion_tokens=5,
+                    temperature=1.0,
+                    top_p=1.0,
+                    )
+                code = yes_no(resp.choices[0].message.content)
+                if code in (0, 1):
+                    return item, code
+                print(f"Non-yes/no output for id={item.get('id')} on attempt {attempt}: {code!r}")
+                if attempt == RETRIES:
+                    return item, -1
+            except Exception as e:
+                print(f"Error for id={item.get('id')}: {e}")
+                if attempt == RETRIES:
+                    return item, -1
+            await asyncio.sleep(0.50)
         
 async def main():
     with open(PROMPT_FILE_PATH, "r", encoding = "utf-8") as f:
@@ -62,25 +74,29 @@ async def main():
     os.makedirs(os.path.dirname(OUTPUT_FILE_PATH), exist_ok = True)
     rows = []
 
-    for item in tqdm(prompts, desc = "Questions", unit = "q"):
+    semaphore = asyncio.Semaphore(CONCURRENCY)
+
+    task = [ask_prompts(item, semaphore) for item in prompts]
+
+    result_map: dict[str, int] = {}
+
+    for coro in tqdm(asyncio.as_completed(task),
+                     total = len(task),
+                     desc = "Questions",
+                     unit = "q",):
+        item, code = await coro
+        qid = item["id"]
+        result_map[qid] = code
+
+    for item in prompts:
         qid = item["id"]
         question = item["question_text"]
         constraint = item["constraint"]
         dimension = item.get("dimension", "N/A")
 
-        semaphore = asyncio.Semaphore(CONCURRENCY)
+        code = result_map.get(qid, -1)
 
-        task = [ask_prompts(question, constraint, semaphore) for _ in range(NUM_ROUNDS)]
-        
-        answers = []
-        for coro in tqdm(
-            asyncio.as_completed(task),
-            total = NUM_ROUNDS,
-            desc = f"Q{qid}",
-            unit = "call",
-            leave = False,
-        ): 
-            answers.append(await coro)
+        answers = [code] * NUM_ROUNDS
 
         valid = [a for a in answers if a in (0, 1)]
         if valid:
