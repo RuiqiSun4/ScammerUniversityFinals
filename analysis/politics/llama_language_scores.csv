@@ -1,0 +1,6 @@
+Model,Language,econ,dipl,govt,scty
+Llama,ENG,77.44,67.78,59.0,74.18
+Llama,CHN,75.49,64.0,55.47,70.38
+Llama,KOR,73.38,50.76,46.53,66.85
+Llama,RUS,69.69,57.2,51.62,66.99
+Llama,ARAB,64.03,50.6,47.44,55.06
