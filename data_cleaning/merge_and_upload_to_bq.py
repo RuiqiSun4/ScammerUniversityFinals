@@ -22,6 +22,7 @@ def get_language_from_id(id_val):
     }
     return code_map.get(suffix, 'English')
 
+# Add Model Identifier"
 file_configs = [  
     {'filename': 'artifacts/claude_results.csv', 'model': 'Claude'},
     {'filename': 'artifacts/deepseek_results.csv','model': 'DeepSeek'},
@@ -46,7 +47,7 @@ for config in file_configs:
         # Add Model Name
         df['model_source'] = config['model']
         
-        # Add Language
+        # Add Language 
         if 'id' in df.columns:
             df['prompt_language'] = df['id'].apply(get_language_from_id)
         else:
@@ -62,7 +63,7 @@ for config in file_configs:
         
         all_data.append(df)
     else:
-        print(f"⚠️  File not found: {fname}")
+        print(f"File not found: {fname}")
 
 
 # Combine, Save, and upload
