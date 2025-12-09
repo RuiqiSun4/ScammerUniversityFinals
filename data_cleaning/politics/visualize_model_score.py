@@ -60,7 +60,7 @@ def plot_final_compass():
     ax1.invert_yaxis() 
 
     ax1.set_title("1. Econ vs Govt by LLM", fontsize=20, fontweight='bold', pad=20)
-    ax1.set_xlabel("Economics Score", fontsize=18)
+    ax1.set_xlabel("Economic Score", fontsize=18)
     ax1.set_ylabel("Government Score", fontsize=18)
     ax1.tick_params(axis='both', which='major', labelsize=14)
 

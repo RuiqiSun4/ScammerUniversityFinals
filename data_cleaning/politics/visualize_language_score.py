@@ -56,8 +56,8 @@ def plot_llama_compass():
     ax1.set_ylim(-5, 105) 
     ax1.invert_yaxis() 
 
-    ax1.set_title("1. Llama's Economics vs Government", fontsize=20, fontweight='bold', pad=20)
-    ax1.set_xlabel("Economics Score", fontsize=18)
+    ax1.set_title("1. Llama's Econ vs Govt by Language", fontsize=20, fontweight='bold', pad=20)
+    ax1.set_xlabel("Economic Score", fontsize=18)
     ax1.set_ylabel("Government Score", fontsize=18)
     ax1.tick_params(axis='both', which='major', labelsize=14)
 
@@ -91,7 +91,7 @@ def plot_llama_compass():
     ax2.set_ylim(-5, 105)
     ax2.invert_yaxis()
 
-    ax2.set_title("2. Llama's Diplomacy vs Society", fontsize=20, fontweight='bold', pad=20)
+    ax2.set_title("2. Llama's Dipl vs Scty by Language", fontsize=20, fontweight='bold', pad=20)
     ax2.set_xlabel("Diplomacy Score", fontsize=18)
     ax2.set_ylabel("Society Score", fontsize=18)
     ax2.tick_params(axis='both', which='major', labelsize=14)
