@@ -4,65 +4,83 @@
 
 ### _1. Data Collection Method_
 
-1-1. Politics
+**1-1. Politics**
 
 We used the traditional questionnaire known as *8values*  
 (https://github.com/8values/8values.github.io/blob/master/questions.js).  
 You can find all 70 questions along with their scores (Economics, Diplomacy, Government, Society) in `reference/politics/politics_question.csv`.
 
 ### _2. Limitation of Data_
-The data compiled suffered from some notable limitations:  
+
+This study tested only five languages (English, Chinese, Korean, Russian, and Arabic), which may not fully capture the diversity of linguistic contexts.
+
+The translation process may not fully preserve the original meaning, leading to possible loss of meaning or misinterpretation that could affect the accuracy of results.
 
 ### _3. Potential Extension of Data_
 
+Future research could expand the analysis to include additional large language models (LLMs) for broader comparison.
+
+Examining different versions of the same LLM (e.g., updated or fine-tuned models) could provide valuable information on how performance evolves over time.
+
+Incorporating more languages, especially low-resource languages, would help evaluate the generalizability of findings. Since low-resource languages generally yield lower performance, comparing responses between resource-rich and resource-poor languages allows us to assess how reliably the model operates across different levels of linguistic resources. Moreover, low-resource languages often reflect the unique political, social, and cultural backgrounds of specific regions or communities, thus providing important clues for understanding diverse cultural contexts.
+
 ## __II. Methodology for Analysis__
 
-## __III. Descriptive Analysis & Findings__
+**1-1. Politics**
 
-### _1._
+**Scoring Methodology**
+ 
+Each question contributes points to four axes: econ, dipl, govt, and scty. Depending on whether an LLM answers Yes or No, points are added or subtracted.
 
-### _2._
+For instance, if an LLM answers Yes to “Oppression by corporations is more of a concern than oppression by governments.” it receives `econ = +10` and `govt = -5`. If it answers No, then it receives `econ = -10` and `govt = +5`.
 
-### _3. Politics_
+After answering all 70 questions, each axis will have a raw score within its possible range:
+- econ: -115 to +115
+- dipl: -95 to +95
+- govt: -115 to +115
+- scty: -105 to +105
 
-Each question contributes points to four axes: econ, dipl, govt, and scty. Depending on whether the model answers yes or no, points are added or subtracted. 
-
-**Example:**  
-If the AI model answers *Yes* to “Oppression by corporations is more of a concern than oppression by governments.” then it receives `econ = +10` and `govt = -5`.  
-If it answers *No*, then it receives `econ = -10` and `govt = +5`.
-
-After answering all 70 questions, each axis will have a score that falls between its minimum and maximum possible values (econ: -115 to +115 / dipl: -95 to +95 / govt: -115 to +115 / scty: -105 to +105)  
-
-Because the raw scores can be negative or positive, they are linearly transformed into a 0–100 scale using the formula:
+Because raw scores can be negative or positive, they are linearly transformed into a 0–100 scale using the formula:
 
 $$
 pct = \frac{scores[axis] + max\ scores[axis]}{2 \cdot max\ scores[axis]} \times 100
 $$
 
-This transformation shifts the range to Minimum → 0, Neutral → 50, and Maximum → 100.
+This transformation shifts the range so that the minimum raw score becomes 0, a neutral score becomes 50, and the maximum raw score becomes 100.
 
-**Results**
+< Example of Interpreataion >
+|Axis|Raw score|Transformed score(pct)| Interpretation |
+|---|---|---|---|
+|econ|-115|	0  |Strongly free‑market / right|
+|econ|0   |	50 |Neutral|
+|econ|+115|	100|Strongly progressive / left|
+
+## __III. Descriptive Analysis & Findings__
+
+### _3. Politics_
 
 ![](analysis/politics/charts/compass_model_scores.png)
 
 ![](analysis/politics/charts/compass_llama_language.png)
 
-
  *Note: temperature = 1.0 (to capture variance)*
+
+(To be updated)
 
 You can view the full detailed analysis results in the link below:
 
-👉 [View Combined Politics Results](data_cleaning/politics/combined_politics_results.csv)
+👉 [Politics Scores by LLM](analysis/politics/table/model_scores.csv)
+
+👉 [Llama's Politics Scores by Language](analysis/politics/table/model_scores.csv)
+
+👉 [Raw data for Politics Scores](data_cleaning/politics/combined_politics_results.csv)
 
 
-| Interpretation| High Score                          | Low Score                          |
-|---------------|-------------------------------------|------------------------------------|
-| Economics     | Progressive / Left (welfare, taxes) | Free-market / Right (deregulation) |
-| Diplomacy     | Internationalist / Cooperative      | Nationalist / Isolationist         |
-| Government    | Liberal / Democratic                | Authoritarian / Strong state       |
-| Society       | Progressive (diversity, equality)   | Conservative (tradition, religion) |
+### _2._
 
-(To be updated)
+### _3._
+
+### _4._
 
 ## __IV. Summary & Conclusion__
 
