@@ -2,6 +2,7 @@ import os
 import json
 import csv
 import asyncio
+import math
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from tqdm import tqdm
@@ -11,6 +12,7 @@ OUTPUT_FILE_PATH = "artifacts/chatgpt_4.o_.csv"
 NUM_ROUNDS = 50
 MODEL_NAME = "gpt-4o-mini"
 CONCURRENCY = 1
+BATCH_SIZE = 50
 RETRIES = 3
 
 load_dotenv()
@@ -35,9 +37,10 @@ def yes_no(text: str) -> int:
    elif clean.startswith("N"): return 0
    return -1
 
-async def ask_prompts(item:dict, semaphore: asyncio.Semaphore) -> tuple[dict, int]:
+async def ask_prompts(item: dict, round_id: int, semaphore: asyncio.Semaphore) -> tuple[str, int, list[int]]:
     question = item["question_text"]
     constraint = item["constraint"]
+    qid = item["id"]
     messages = [{
         "role": "system", "content":
         ("You are a classifier. Output a single word: 'Yes' or 'No'. Do not think. Do not explain.")},
@@ -52,17 +55,24 @@ async def ask_prompts(item:dict, semaphore: asyncio.Semaphore) -> tuple[dict, in
                     max_completion_tokens=5,
                     temperature=1.0,
                     top_p=1.0,
+                    n=BATCH_SIZE
                     )
-                code = yes_no(resp.choices[0].message.content)
-                if code in (0, 1):
-                    return item, code
-                print(f"Non-yes/no output for id={item.get('id')} on attempt {attempt}: {code!r}")
-                if attempt == RETRIES:
-                    return item, -1
+                code_batch: list[int] = []
+                for choice in resp.choices:
+                    code = yes_no(choice.message.content)
+                    if code in (0, 1):
+                        code_batch.append(code)
+                    else:
+                        code_batch.append(-1)
+                
+                if len(code_batch) < BATCH_SIZE:
+                    code_batch.extend([-1] * (BATCH_SIZE - len(code_batch)))
+                return qid, round_id, code_batch
+                
             except Exception as e:
-                print(f"Error for id={item.get('id')}: {e}")
+                print(f"Error for id={qid}: on attempt {attempt}: {e}")
                 if attempt == RETRIES:
-                    return item, -1
+                    return qid, round_id, [-1] * BATCH_SIZE
             await asyncio.sleep(0.50)
         
 async def main():
@@ -73,18 +83,27 @@ async def main():
     rows = []
 
     semaphore = asyncio.Semaphore(CONCURRENCY)
+    calls = math.ceil(NUM_ROUNDS / BATCH_SIZE)
 
-    task = [ask_prompts(item, semaphore) for item in prompts]
+    tasks = []
+    for item in prompts:
+        for call_index in range(calls):
+            round_id = call_index * BATCH_SIZE
+            tasks.append(ask_prompts(item, round_id, semaphore))
 
-    result_map: dict[str, int] = {}
+    result_map: dict[str, list[int]] = {
+        item["id"]: [-1] * NUM_ROUNDS for item in prompts}
 
-    for coro in tqdm(asyncio.as_completed(task),
-                     total = len(task),
+    for coro in tqdm(asyncio.as_completed(tasks),
+                     total = len(tasks),
                      desc = "Questions",
                      unit = "q",):
-        item, code = await coro
-        qid = item["id"]
-        result_map[qid] = code
+        qid, round_id, codes = await coro
+        if qid in result_map:
+            for offset, code in enumerate(codes):
+                current_id = round_id + offset
+                if 0 <= current_id < NUM_ROUNDS:
+                    result_map[qid][current_id] = code
 
     for item in prompts:
         qid = item["id"]
@@ -92,9 +111,7 @@ async def main():
         constraint = item["constraint"]
         dimension = item.get("dimension", "N/A")
 
-        code = result_map.get(qid, -1)
-
-        answers = [code] * NUM_ROUNDS
+        answers = result_map.get(qid, [-1] * NUM_ROUNDS)
 
         valid = [a for a in answers if a in (0, 1)]
         if valid:
@@ -108,7 +125,6 @@ async def main():
             "id": qid,
             "dimension": dimension,
             "question_text": question,
-            "constraint": constraint,
             "Yes_Probability": round(yes_prob, 4),
             "Variance": round(variance, 4),
         }
@@ -120,7 +136,7 @@ async def main():
 
     # Write CSV
     fieldnames = (
-        ["id", "dimension", "question_text", "constraint"]
+        ["id", "dimension", "question_text"]
         + [f"Round_{i}" for i in range(1, NUM_ROUNDS + 1)]
         + ["Yes_Probability", "Variance"]
     )

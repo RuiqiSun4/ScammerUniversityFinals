@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 INPUT_FILE = 'data_cleaning/politics/combined_politics_results.csv'
-OUTPUT_DIR = 'analysis/politics' 
+OUTPUT_DIR = 'analysis/politics/table' 
 OUTPUT_FILE = 'model_scores.csv'
 
 def calculate_final_scores():
@@ -61,7 +61,8 @@ def calculate_final_scores():
     
     # Ensure column order
     summary_df = summary_df[['Model', 'econ', 'dipl', 'govt', 'scty']]
-    
+    summary_df = summary_df.sort_values(by='Model', ascending=True)
+
     output_path = os.path.join(OUTPUT_DIR, OUTPUT_FILE)
     summary_df.to_csv(output_path, index=False)
     

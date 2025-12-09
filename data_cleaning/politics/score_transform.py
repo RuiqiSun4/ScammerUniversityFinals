@@ -28,8 +28,18 @@ def main():
         return
 
     # 4. Find CSV files
-    files = [f for f in os.listdir(BASE_DIR) if f.endswith('.csv') and 'politics_question' not in f]
-    
+    # Add exclusion criteria to filter out unwanted files
+    files = [
+        f for f in os.listdir(BASE_DIR) 
+        if f.endswith('.csv') 
+        # 1. Exclude the reference (weights) file if present
+        and 'politics_question' not in f 
+        # 2. Exclude the pre-merged file created by others (prevents duplication)
+        and 'Combined_table_for analysis' not in f
+        # 3. Exclude the output file itself (prevents recursive processing)
+        and 'combined_politics_results' not in f
+    ]
+
     all_data = [] 
     mapping = {1: 1, 0: -1, -1: 0} # Scoring rule: Yes(1), No(-1), Neutral(0)
 

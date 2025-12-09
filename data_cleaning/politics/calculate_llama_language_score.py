@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 INPUT_FILE = 'data_cleaning/politics/combined_politics_results.csv'
-OUTPUT_DIR = 'analysis/politics'
+OUTPUT_DIR = 'analysis/politics/table'
 OUTPUT_FILE = 'llama_language_scores.csv'
 TARGET_MODEL_KEYWORD = 'llama'  
 
