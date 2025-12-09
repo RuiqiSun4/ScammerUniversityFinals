@@ -27,27 +27,34 @@ def main():
         print(f"[Error] Input directory not found: {BASE_DIR}")
         return
 
-    # 4. Find CSV files
-    # Add exclusion criteria to filter out unwanted files
-    files = [
-        f for f in os.listdir(BASE_DIR) 
-        if f.endswith('.csv') 
-        # 1. Exclude the reference (weights) file if present
-        and 'politics_question' not in f 
-        # 2. Exclude the pre-merged file created by others (prevents duplication)
-        and 'Combined_table_for analysis' not in f
-        # 3. Exclude the output file itself (prevents recursive processing)
-        and 'combined_politics_results' not in f
+    # 4. Define Target Files
+    # Explicitly specify filenames to avoid processing unwanted files from teammates.
+    TARGET_FILES = [
+        'chatgpt_4.o_.csv', 
+        'claude_results.csv', 
+        'deepseek_results.csv', 
+        'gemini_results.csv', 
+        'grok_results.csv', 
+        'llama_results.csv', 
+        'qwen_results.csv' 
     ]
 
-    all_data = [] 
+    # Filter only files that actually exist in the directory to prevent errors
+    existing_files_in_dir = set(os.listdir(BASE_DIR))
+    files = [f for f in TARGET_FILES if f in existing_files_in_dir]
+
+    # Print a warning if any target files are missing (for debugging)
+    if len(files) < len(TARGET_FILES):
+        missing = set(TARGET_FILES) - set(files)
+        print(f"[Warning] Some target files are missing in '{BASE_DIR}': {missing}")
+    
+    print(f"Processing {len(files)} target files...")
+
+    all_data = []
+    processed_count = 0
     mapping = {1: 1, 0: -1, -1: 0} # Scoring rule: Yes(1), No(-1), Neutral(0)
 
-    print(f"Scanning directory: {BASE_DIR}")
-    print(f"Found {len(files)} files to process...")
-
-    processed_count = 0
-
+    # Process each file
     for file_name in files:
         try:
             file_path = os.path.join(BASE_DIR, file_name)

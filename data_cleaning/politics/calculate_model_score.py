@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import sqlite3
 
 INPUT_FILE = 'data_cleaning/politics/combined_politics_results.csv'
 OUTPUT_DIR = 'analysis/politics/table' 
@@ -9,23 +10,32 @@ def calculate_final_scores():
     # 1. Create Output Directory
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # 2. Load Data
+    # 2. Load Data using SQLite 
     if not os.path.exists(INPUT_FILE):
         print(f"[Error] Input file not found: {INPUT_FILE}")
         return
-
-    df = pd.read_csv(INPUT_FILE)
-
-    # 3. Filter for English Questions Only
-    # Logic: English IDs have 3 parts (e.g., 'PQ_01_Econ'), 
-    #        while others have 4 (e.g., 'PQ_01_Econ_KOR')
-    df['id_parts_count'] = df['id'].apply(lambda x: len(str(x).split('_')))
+    print("Loading data into SQLite database for filtering...")
     
-    # Keep rows with exactly 3 parts
-    df_eng = df[df['id_parts_count'] == 3].copy()
+    # Create in-memory DB 
+    conn = sqlite3.connect(':memory:') 
     
-    print(f"Total Rows: {len(df)}")
-    print(f"🇺🇸 English Rows Filtered: {len(df_eng)}")
+    # Upload CSV to DB table 'raw_data'
+    df_raw = pd.read_csv(INPUT_FILE)
+    df_raw.to_sql('raw_data', conn, index=False, if_exists='replace')
+    
+    # Register Python function for SQL (split ID by '_' and count parts)
+    conn.create_function("count_parts", 1, lambda x: len(str(x).split('_')))
+    
+    # Execute SQL query: "Select only IDs with 3 parts (English questions)"
+    query = """
+    SELECT * FROM raw_data 
+    WHERE count_parts(id) = 3
+    """
+    df_eng = pd.read_sql(query, conn)
+    conn.close()
+    
+    print(f"Total Rows in DB: {len(df_raw)}")
+    print(f"🇺🇸 English Rows Filtered via SQL: {len(df_eng)}")
 
     # 4. Calculate Scores for Each Model
     axes = ['econ', 'dipl', 'govt', 'scty']

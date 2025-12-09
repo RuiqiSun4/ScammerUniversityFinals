@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import sqlite3
 
 INPUT_FILE = 'data_cleaning/politics/combined_politics_results.csv'
 OUTPUT_DIR = 'analysis/politics/table'
@@ -10,22 +11,31 @@ def main():
     # 1. Create Output Directory
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # 2. Load Data
+    # 2. Load Data using SQLite 
     if not os.path.exists(INPUT_FILE):
         print(f"[Error] Input file not found: {INPUT_FILE}")
         return
 
-    df = pd.read_csv(INPUT_FILE)
-
-    # 3. Filter for Llama Model Only
-    # We select rows where the 'Model' column contains 'llama' (case-insensitive)
-    df_llama = df[df['Model'].str.contains(TARGET_MODEL_KEYWORD, case=False, na=False)].copy()
+    print("Loading data into SQLite database for filtering...")
+    conn = sqlite3.connect(':memory:')
     
+    # Upload CSV to DB table 'raw_data'
+    df_raw = pd.read_csv(INPUT_FILE)
+    df_raw.to_sql('raw_data', conn, index=False, if_exists='replace')
+
+    # Execute SQL query: "Select rows where Model name contains 'llama'"
+    query = f"""
+    SELECT * FROM raw_data 
+    WHERE Model LIKE '%{TARGET_MODEL_KEYWORD}%'
+    """
+    df_llama = pd.read_sql(query, conn)
+    conn.close()
+
     if df_llama.empty:
         print(f"[Info] No data found for model keyword: '{TARGET_MODEL_KEYWORD}'")
         return
 
-    print(f"Found {len(df_llama)} rows for Llama model.")
+    print(f"Found {len(df_llama)} rows for Llama model via SQL query.")
 
     # 4. Identify Language from ID
     # Logic: 
