@@ -30,7 +30,7 @@ file_configs = [
     {'filename': 'artifacts/grok_results.csv',   'model': 'Grok'},
     {'filename': 'artifacts/llama_results.csv',  'model': 'Llama'},
     {'filename': 'artifacts/qwen_results.csv',   'model': 'Qwen'},
-    {'filename': 'artifacts/chatgpt_4.o__no_constraint.csv', 'model': 'ChatGPT-4o'},
+    {'filename': 'artifacts/chatgpt_4.o_.csv', 'model': 'ChatGPT-4o'},
 ]
 
 all_data = []
