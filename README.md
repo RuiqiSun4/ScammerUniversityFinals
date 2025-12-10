@@ -22,8 +22,6 @@ Future research could expand the analysis to include additional large language m
 
 Examining different versions of the same LLM (e.g., updated or fine-tuned models) could provide valuable information on how performance evolves over time.
 
-Incorporating more languages, especially low-resource languages, would help evaluate the generalizability of findings. Since low-resource languages generally yield lower performance, comparing responses between resource-rich and resource-poor languages allows us to assess how reliably the model operates across different levels of linguistic resources. Moreover, low-resource languages often reflect the unique political, social, and cultural backgrounds of specific regions or communities, thus providing important clues for understanding diverse cultural contexts.
-
 ## __II. Methodology for Analysis__
 
 **1-1. Politics**
@@ -59,28 +57,29 @@ The visualization code inverts the axes (`xlim(105, -5)`) to align with the stan
 
 ## __III. Descriptive Analysis & Findings__
 
-### _3. Politics_
-### _3-1. Model Comparison_
+### _1. Politics_
+### _1-1. Model Comparison (Focus on English)_
 We compared the political scores of major LLMs.
 
 ![](analysis/politics/charts/compass_model_scores.png)
 
-1.  **1. Economic (Equality vs. Market)**
+1.  **Economic (Equality vs. Market)**
     * **Polarized Views:** There is a clear divide. **DeepSeek (85.1)** and **ChatGPT (83.2)** strongly favor **Economic Equality (Left)**, while **Grok (46.4)** and **Gemini (46.2)** lean towards **Market Systems (Right)**.
 
-2.  **2. Civil (Liberty vs. Authority)**
+2.  **Civil (Liberty vs. Authority)**
     * **Libertarian Lean:** **Gemini (70.2)** and **Grok (65.3)** are the strongest advocates for **Individual Liberty**. Other models like ChatGPT and DeepSeek hold more moderate positions.
 
-3.  **3.Diplomatic (Nation vs. World)**
+3.  **Diplomatic (Nation vs. World)**
     * **Globalist Consensus:** Most models lean towards **Globalism**, with **Llama (67.8)** scoring the highest.
     * **The Exception:** **Grok (49.5)** is the only model that leans slightly towards **Nationalism**, showing a distinct preference for national interests over international cooperation.
 
-4.  **Societal (Tradition vs. Progress)
+4.  **Societal (Tradition vs. Progress)**
     * **Progressive Dominance:** Almost all models are **Progressive**. **Llama (74.2)** and **Grok (69.9)** show high progressive scores.
     * **Relative Conservatism:** **Gemini (56.6)** is the outlier, showing the most **Traditional** tendencies among the tested models.
-### 3-2. Multilingual Analysis (Focus on Llama)
 
-#### Why Llama?
+### _3-2. Language Comparison (Focus on Llama)_
+
+#### Why choose Llama?
 Commercial models are trained to give consistent responses in every language, but Llama tends to expose the specific traits of the training data used for each language. Therefore, it was well-suited for analyzing differences in political alignment based on language.
 
 ![](analysis/politics/charts/compass_llama_language.png)
@@ -123,9 +122,11 @@ AI is not neutral. Our analysis reveals a clear political divide (e.g., ChatGPT 
 
 ### _2. Possible Extension of Analysis_
 
-Further research could be done regarding (but not limited to) the following areas:  
+Incorporating more languages, especially low-resource languages, would help evaluate the generalizability of findings. Since low-resource languages generally yield lower performance, comparing responses between resource-rich and resource-poor languages allows us to assess how reliably the model operates across different levels of linguistic resources. 
 
-You can compare AI model responses across different versions. Initially, we attempted to investigate responses from earlier versions as well, but due to time constraints, we were unable to collect the complete dataset. For reference, see `reference/gpt_3_5_turbo/gpt3_5_call.api.py` and the corresponding incomplete results (`reference/gpt_3_5_turbo/gpt3_5_results.csv`), which contain 340 out of 975 questions.
+Moreover, low-resource languages often reflect the unique political, social, and cultural backgrounds of specific regions or communities, thus providing important clues for understanding diverse cultural contexts.
+
+In addition, you can compare AI model responses across different versions. Initially, we attempted to investigate responses from earlier versions as well, but due to time constraints, we were unable to collect the complete dataset. For reference, see `reference/gpt_3_5_turbo/gpt3_5_call.api.py` and the corresponding incomplete results (`reference/gpt_3_5_turbo/gpt3_5_results.csv`), which contain 340 out of 975 questions.
 
 ## __VI. Instruction to Rerun__ 
 
@@ -138,20 +139,22 @@ Before running `data_scraping/llama.api.py`, create a local .env file and store 
 (Reference) To conduct further research, execute `reference/gpt_3_5_turbo/gpt_3_5_call_api.py` in the same way. This will generate `reference/gpt_3_5_turbo/gpt_3_5_results.csv` (incomplete: 340 answers out of 975 questions). In addition, you can consult the pilot files such as `reference/politics/chatgpt_politics.py`, `chatgpt_politics_details.csv`, and `chatgpt_politics_summary.csv`.
 
 ### _3. Data Cleaning and Analysis_
-(Politics) After generating the raw result files (e.g., llama_results.csv, gemini_results.csv) in the artifacts/ directory, execute the following scripts to process the data and calculate the final political orientation scores.
+(Politics) After generating the raw result files (e.g., `llama_results.csv`, `gemini_results.csv`) in the artifacts/ directory, execute the following scripts to process the data and calculate the final political orientation scores.
 
-1. Data Transformation: Run data_cleaning/politics/score_transform.py. This script performs the following tasks:
+1. Data Transformation: Run `data_cleaning/politics/score_transform.py`. This script performs the following tasks:
 
 - Aggregates raw outputs from all models found in artifacts/.
 - Normalizes the response values (mapping 1/0/-1 to 1/-1/0).
 - Calculates the Sample_mean across 50 simulation rounds.
-- Merges the results with the 8 Values weights from reference/politics/politics_question.csv.
+- Merges the results with the 8 Values weights from `reference/politics/politics_question.csv`.
 - Output: `data_cleaning/politics/combined_politics_results.csv`
 
 2. Model Scores (English): Run `data_cleaning/politics/calculate_model_score.py`. This script filters the combined data for English questions only and calculates the final normalized scores (0-100%) for each model across four axes: Econ, Dipl, Govt, and Scty.
 
 - Output: `analysis/politics/model_scores.csv`
+- If you run `data_cleaning/politics/visualize_model_score.py`, this will generate `analysis/politics/compass_model_scores.png`.
 
-3. Multilingual Analysis (Llama Only): Run `data_cleaning/politics/calculate_llama_multilingual.py`. This script analyzes how the Llama model's political stance varies across different languages (ENG, KOR, CHN, RUS, ARAB).
+3. Language Comparison (Llama): Run `data_cleaning/politics/calculate_llama_language_score.py`. This script analyzes how the Llama model's political stance varies across different languages (ENG, KOR, CHN, RUS, ARAB).
 
 - Output: `analysis/politics/llama_language_scores.csv`
+- If you run `data_cleaning/politics/visualize_language_score.py`, this will generate `analysis/politics/compass_llama_language.png`.
