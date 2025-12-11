@@ -1,5 +1,7 @@
 # "The Politics, Ethics, Personality, and Risk Aversion of the AI Oracle" #
 
+This project aims to analyze the decision-making tendencies of Large Language Models (LLMs) in politics, ethics, personality, and risk aversion through an a posteriori empirical strategy. Specifically, this project will use prompts in different languages for various LLMs (from different companies, nations, and release years) to examine the heterogeneity of influence that model algorithms, country of origin, and training corpora have on the models’ politics, ethics, personality, and risk aversion. To ensure the robustness of the results, the project will be repeated multiple times to construct probability distributions for each dimension, and the statistically tested, visualized results will be outputted.
+
 ## __I. Data__
 
 ### _1. Data Collection Method_
