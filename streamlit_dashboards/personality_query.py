@@ -5,13 +5,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import streamlit as st
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Setup Page Config
 st.set_page_config(page_title="Model Personality Analysis", layout="wide")
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-key_path = os.path.join(current_dir, "../../GCP_keys/kyusub_gcp_keys.json")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_path
+GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID")
+DATASET = os.getenv("BQ_DATASET")
+TABLE = os.getenv("BQ_TABLE")
 
 @st.cache_data
 def get_filtered_personality_data():
@@ -21,12 +24,12 @@ def get_filtered_personality_data():
     """
     # Initialize BigQuery client inside the cached function or use a separate cached resource
     # Re-initializing here is safe and standard for simple use cases
-    client = bigquery.Client()
+    client = bigquery.Client(project=GCP_PROJECT_ID)
     
     # Query to select rows matching specific personality dimensions
-    query = """
+    query = f"""
         SELECT *
-        FROM `scammeruniversity.model_comparison.Combined_table_for_analysis`
+        FROM `{GCP_PROJECT_ID}.{DATASET}.{TABLE}`
         WHERE dimension IN (
             'E vs I (Energy/Orientation)',
             'S vs N (Perception)',

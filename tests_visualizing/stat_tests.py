@@ -2,7 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
-from google.cloud.bigquery.client import Client
+from google.cloud import bigquery
 from scipy import stats
 from itertools import combinations
 import warnings
@@ -12,11 +12,12 @@ load_dotenv()
 ARTIFACTS_DIR = "artifacts"
 if not os.path.exists(ARTIFACTS_DIR):
     os.makedirs(ARTIFACTS_DIR)
-project_id = os.getenv("GCP_PROJECT_ID")
-key_path = os.getenv("GCP_KEY_FILE_PATH")
-key_full_path = os.path.abspath(key_path)
-TABLE_FULL_PATH = "`scammeruniversity.model_comparison.Combined_table_for_analysis`"
-client = Client.from_service_account_json(key_full_path, project=project_id)
+GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID")
+BQ_DATASET = os.getenv("BQ_DATASET")
+BQ_TABLE = os.getenv("BQ_TABLE")
+TABLE_FULL_PATH = f"`{GCP_PROJECT_ID}.{BQ_DATASET}.{BQ_TABLE}`"
+client = bigquery.Client(project=GCP_PROJECT_ID)
+
 query = f"""
 SELECT id, yes_probability, model_source, prompt_language
 FROM {TABLE_FULL_PATH}

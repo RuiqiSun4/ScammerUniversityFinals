@@ -10,8 +10,8 @@ OUTPUT_FILE_PATH = "artifacts/qwen_results.csv"
 NUM_ROUNDS = 50
 load_dotenv()
 client = OpenAI(
-    api_key = os.getenv("WUYI_API_KEY"),
-    base_url = os.getenv("WUYI_BASE_URL"),
+    api_key = os.getenv("DEEPINFRA_API_KEY"),
+    base_url = "https://api.deepinfra.com/v1/openai",
 )
 
 MODEL_NAME = "Qwen/Qwen3-Next-80B-A3B-Instruct"

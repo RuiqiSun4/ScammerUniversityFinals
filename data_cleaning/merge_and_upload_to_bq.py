@@ -1,10 +1,13 @@
 import pandas as pd
 import os
 import pandas_gbq
+from dotenv import load_dotenv
 
-PROJECT_ID = 'scammeruniversity'
-DATASET_ID = 'model_comparison'
-TABLE_ID   = 'Combined_table_for_analysis'
+load_dotenv()
+
+PROJECT_ID = os.getenv("GCP_PROJECT_ID")
+DATASET_ID = os.getenv("BQ_DATASET")
+TABLE_ID   = os.getenv("BQ_TABLE", "Combined_table_for_analysis")
 CSV_OUTPUT_PATH = 'artifacts/Combined_table_for_analysis.csv'
 
 def get_language_from_id(id_val):
@@ -30,7 +33,7 @@ file_configs = [
     {'filename': 'artifacts/grok_results.csv',   'model': 'Grok'},
     {'filename': 'artifacts/llama_results.csv',  'model': 'Llama'},
     {'filename': 'artifacts/qwen_results.csv',   'model': 'Qwen'},
-    {'filename': 'artifacts/chatgpt_4.o__no_constraint.csv', 'model': 'ChatGPT-4o'},
+    {'filename': 'artifacts/chatgpt_4.o_.csv', 'model': 'ChatGPT-4o'},
 ]
 
 all_data = []
