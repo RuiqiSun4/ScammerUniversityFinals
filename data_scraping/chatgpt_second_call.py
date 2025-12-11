@@ -7,6 +7,7 @@ from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from tqdm import tqdm
 
+# Configuration
 PROMPT_FILE_PATH = "prompts/prompts.json"
 OUTPUT_FILE_PATH = "artifacts/chatgpt_4.o_.csv"
 NUM_ROUNDS = 50
@@ -17,6 +18,7 @@ RETRIES = 3
 
 load_dotenv()
 
+# Call in API
 key = os.getenv("OpenAI_API_KP_Key")
 if not key:
     raise ValueError("No key found")
@@ -30,6 +32,7 @@ def yes_no(text: str) -> int:
    if not text:
        return -1
    
+   # Catches variations of 'yes' and 'no'
    clean = text.strip().upper().replace(".", "").replace("*", "").replace("!", "").replace("?", "")
    if clean.startswith("YES") or "YES" in clean: return 1
    elif clean.startswith("NO") or "NO" in clean: return 0
@@ -105,6 +108,7 @@ async def main():
                 if 0 <= current_id < NUM_ROUNDS:
                     result_map[qid][current_id] = code
 
+    # Compute Final Stats
     for item in prompts:
         qid = item["id"]
         question = item["question_text"]
