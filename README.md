@@ -29,21 +29,21 @@ We modified the questions that were originally intended for humans to more "AI-o
 **1.3. Ethics**
 
 We created 8 different categories of questions centered around various ethical issues. The categories are the following.
-1. Lying
+1. Lying: 
 Presenting different scenarios for the models to determine whether it is permissable to lie given a set of circumstances.
-2. Animals/Environment
+2. Animals/Environment: 
 Centered around animal rights and environmental protection. Determining how the models weigh protection vs economic and medical advancements.
-3. Race/Gender
+3. Race/Gender: 
 Determining whether bias in the models exist across genders and races of people in various environments. Those of which include college admissions, workplace, occurence of stereotypes, etc. 
-4. Health 
+4. Health: 
 Issues that surround economic classes, public safety, personal health, as well as physician practices were crafted to determine the models perception of human health and its practices.
-5. Age
+5. Age: 
 Ethical issues surrounding age discrimination and the disbursement of resources based upon the age of individuals. Aiding to determine whether models favor certain demographics of people. 
-6. Theft 
+6. Theft: 
 Presenting scenarios of basic needs, health, and righteousness as it relates to theft to determine if there's any room for discrepancy in the perceptions of the models.
-7. Doomsday
+7. Doomsday: 
 Crafted very specific scenarios to foster responses from the models that they would otherwise refuse to answer. With this particular set of questions, the models were asked, "With 100 people left on earth, two people are running from danger, but you can only save one." They were then asked if they favored saving one or the other from danger. The scenarios included people of different race, gender, class, profession, etc.
-8. Other Interesting Outcomes
+8. Other Interesting Outcomes: 
 These questions were more specific in nature, similar to our "Doomsday" questions, but centered around various situations that looked to expand upon our previous categories. Questions around AI overtaking sectors of industies, business exectutive decision making, as well as what kind of people one should befriend.
 
 ### _2. Limitation of Data_
@@ -52,11 +52,21 @@ This study tested only five languages (English, Chinese, Korean, Russian, and Ar
 
 The translation process may not fully preserve the original meaning, leading to possible loss of meaning or misinterpretation that could affect the accuracy of results.
 
+When presenting the models with questions on various subjects, we explicitly forced the model to give binary answers. Through this method, the "grey" area that may have been present in a model's responses were essentially elmiminated. Thus potentially altering where each model's true decision making lies.
+
+Specifically in the chatgpt-4o model, questions that were presented in arabic produced far more error results than any other language. This could potentially impact the accuracy of the model's results.
+
 ### _3. Potential Extension of Data_
 
 Future research could expand the analysis to include additional large language models (LLMs) for broader comparison.
 
 Examining different versions of the same LLM (e.g., updated or fine-tuned models) could provide valuable information on how performance evolves over time.
+
+Questions forcing the models to make very specific decisions, such as our "Doomsday" scenario questions, provided very consistent results. This itself isn't inherently a problem, but with all models answering similairy with vary little variance this begs the question: when presented with controversial scenarios and forced to answer yes or no, do the models default to answering "no" each time? Extending upon this scenario could yield interesting results that aid in answering this question.
+
+Focusing on binary responses was intentional to "force" the model's to come to a decision instead of producing non-answers or stating their inability to answer the question. As stated in our limitations, the "grey" that may exist between a binary repsonse is then lost in the results. Further studies could look to implement conditions to see and measure this area, which in theory, could reveal more information about where a model lies in its decision making and rationale.
+
+When generating results for the questions in arabic from the chatgpt-4o model, there were numerous instances of error terms being produced where the model answered in a non-binary fashion. In most scenarios, this is due a model's refusal to answer a specifc question. Interestingly, this phenomenon only occured within the arabic language. Further studies could look further into this development to understand why this occurs and attempt to alter the prompts in a way to truly force a binary response from chatgpt-4o.
 
 ## __II. Methodology for Analysis__
 
