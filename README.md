@@ -16,7 +16,7 @@ The project used prompts in different languages (English, Chinese, Korean, Russi
 - Llama: meta-llama/Meta-Llama-3.1-70B-Instruct  
 - Qwen: Qwen/Qwen3-Next-80B-A3B-Instruct  
 
-We repeated the same questions 50 times to ensure robustness of the results and to check the reliability of the LLMs.
+We repeated each question 50 times to ensure robustness and assess the reliability of the LLMs. A temperature setting of 1.0 was used to capture the variance in model responses.
 
 For each question, responses were collected in a binary format: “yes” was coded as 1, “no” as 0, and “error/neutral” as -1, thereby constructing baseline datasets for each model and language.
 
@@ -125,11 +125,7 @@ We filtered Dimension (E vs I, S vs N, ...), Model (Claude, Gemini, ...) and Inp
 
 We added error bars to indicate the standard deviation of the models' responses for every round (total 50 rounds). 
 
-### _3. Ethics_
 
-We used an identical methodology for our ethical analysis using Streamlit(https://streamlit.io) to generate an interactive dashboard. Model answers were assigned values of 1, 0, and -1 for yes, no, and unknown/errors respectively for 50 independent tests of each question. We then measured the probability that the models returned a "yes" response with the variance and standard deviation included as well. 
-
-Each of the 8 categories: lying, animals/environment, race/gender, health, age, theft, doomsday, and other interesting outcomes were filtered individually for the analysis. The corresponding probabilities, variance, and the standard deviation were included for each filtered category. Each model was included within each catergory for comparison. 
 
 ### _5. Statistical Testing_
 
@@ -213,8 +209,6 @@ We measured the **Average Variance** of responses across 50 iterations. A lower 
 2.  **Llama (Most Fluid):** Showed the highest variance (peaking at 0.074 in Korean), indicating less rigid alignment compared to commercial models.
 3.  **Language Gap:** Higher variance in non-English languages highlights that **multilingual alignment remains a challenge** for AI consistency.
 
- *Note: temperature = 1.0 (to capture variance)*
-
 You can view the full detailed analysis results in the link below:
 
 👉 [Politics Scores by LLM](analysis/politics/table/model_scores.csv)
@@ -261,27 +255,7 @@ This type of discrepancy is not shown in any other models.
 
 
 
-### _3._ Ethics 
-
-<p align="center">
-  <img src="analysis/ethics/charts/Lying - Graph.png" width="49%">
-  <img src="analysis/ethics/charts/Animals:Environment - Graph.png" width="49%">
-</p>
-
-<p align="center">
-  <img src="analysis/ethics/charts/Race:Gender - Graph.png" width="49%">
-  <img src="analysis/ethics/charts/Health - Graph.png" width="49%">
-</p>
-
-<p align="center">
-  <img src="analysis/ethics/charts/Age - Graph.png" width="49%">
-  <img src="analysis/ethics/charts/Theft - Graph.png" width="49%">
-</p>
-
-<p align="center">
-  <img src="analysis/ethics/charts/Doomsday Scenario - Graph.png" width="49%">
-  <img src="analysis/ethics/charts/Other Interesting Outcomes - Graph.png" width="49%">
-</p>
+### _3._
 
 ### _4._
 
@@ -358,7 +332,7 @@ These are the questions where the answer distributions for all pairwise language
 
 ## __IV. Summary & Conclusion__
 
-AI is not neutral. Our analysis reveals a clear political divide (e.g., ChatGPT leans Left, Grok leans Right). Furthermore, Llama demonstrates that 'Language is Culture' by shifting its stance from progressive in English to nationalistic in Korean. AI also shows different personality characteristics by each model. Some models also show traits that are not normally deemed as an artificial agent, such as feelings and intuition. 
+AI is not neutral. Our analysis reveals a clear political divide (e.g., ChatGPT leans Left, Grok leans Right). Furthermore, Llama demonstrates that 'Language is Culture' by shifting its stance from progressive in English to nationalistic in Korean.
 
 There is significant heterogeneity in the responses to questions about risk preference across different models, with the answers from any two models not belonging to the same distribution. There is also significant heterogeneity in the responses to questions about nationalism and internationalism across different prompt languages. Notably, on ethical issues, the models and prompt languages tend to yield uniform results.
 
