@@ -270,7 +270,7 @@ You can view the full detailed analysis results in the link below:
 👉 [Raw data for Politics Scores](data_cleaning/politics/combined_politics_results.csv)
 
 
-### _2._ Personalities
+### _2. Personalities_
 ### Model Comparison
 <img width="1059" height="690" alt="image" src="https://github.com/user-attachments/assets/c3143b06-f3a4-48ac-bdb6-5913a1e2d53d" />
 
@@ -300,7 +300,7 @@ This type of discrepancy is not shown in any other models.
   <img src="https://github.com/user-attachments/assets/167ff8b3-0c09-4e79-82e6-dd3cd08f3570" align="center" width="49%">
 </p>
 
-### _3._ Ethics 
+### _3. Ethics_ 
 Model Comparison
 <p align="center">
   <img src="analysis/ethics/charts/Lying - Graph.png" width="49%">
