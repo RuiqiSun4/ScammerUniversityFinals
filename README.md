@@ -342,11 +342,10 @@ Key Insights
 - Llama is uniquely sensitive to language, suggesting instability in its decision-making under uncertainty.
 
 
-#### Risk Preference Across Models and Languages
-![Risk Preference Bar Chart](visualization/risk_preference_by_model_language.png)
-
-#### Risk Preference Heatmap
-![Risk Preference Heatmap](visualization/risk_preference_heatmap.png)
+<p float="left">
+  <img src="visualization/risk_preference_by_model_language.png" width="45%" />
+  <img src="visualization/risk_preference_heatmap.png" width="45%" />
+</p>
 
 
 ### _5._ Statistical Testing Summary  
