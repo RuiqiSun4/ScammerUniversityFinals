@@ -345,14 +345,14 @@ Model Comparison
 To evaluate how different LLMs behave under uncertainty, we computed each model’s average risk-preference score across five prompt languages (Arabic, Chinese, English, Korean, Russian). A higher score indicates greater willingness to take risks, whereas lower (or negative) values reflect risk-averse behavior.
 
 (1) Cross-Model Comparison (Bar Chart)  
-![Risk Preference Bar Chart](visualization/risk_preference_by_model_language.png)
+![Risk Preference Bar Chart](analysis/risk%20preference//risk_preference_by_model_language.png)
 The bar chart reveals several clear tendencies:
 - Grok consistently shows the highest risk-seeking behavior across all languages, with scores approaching 0.90.
 - ChatGPT-4o and DeepSeek display moderate risk preference, remaining relatively stable across languages.
 - Claude and Gemini show overall lower risk tolerance, with Gemini being the most consistently risk-averse among frontier models.
 
 (2) Cross-Language Comparison (Heatmap)
-![Risk Preference Heatmap](visualization/risk_preference_heatmap.png)
+![Risk Preference Heatmap](analysis/risk%20preference//risk_preference_heatmap.png)
 Key Fingdings by Model:  
 1. ChatGPT-4o  
 - Moderately Risk-Seeking: Maintains a consistent preference for risk, with scores mostly clustering between 0.63 and 0.79.  

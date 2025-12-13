@@ -42,7 +42,7 @@ ORDER BY
 df = client.query(query).to_dataframe()
 
 # Make sure output folder exists
-os.makedirs("visualization", exist_ok=True)
+os.makedirs("analysis/risk preference", exist_ok=True)
 
 # Step 30: Plot within-model differences
 models = df["model_source"].unique()
@@ -63,7 +63,7 @@ for model in models:
     plt.ylabel("Average Risk Preference Score")
 
     plt.tight_layout()
-    plt.savefig(f"visualization/risk_preference_within_model_{model}.png", dpi=300)
+    plt.savefig(f"analysis/risk preference/risk_preference_within_model_{model}.png", dpi=300)
     plt.close()
 
 print("Saved all Step 30 figures to visualization/")
