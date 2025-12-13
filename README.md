@@ -330,7 +330,13 @@ Race/Gender: For the first time in our analysis of the ethical categories, we ha
 
 Health: Our two categories of response here are rules/profit-focused and access-focused. Based on the trends we saw from the previous three categories of question, we expected the model to deliever similar results, but that was far from the case. The models all responsed above the equilibrium with ChatGPT-4o being the exception barely skating by with a probability of 0.4955. Whereas, for the other models, sat above that equilbrium with near identical results in pairs. Grok and Deepseek were both at ~0.45 probability while Claude, Llama, and Qwen ranged from ~0.33 to ~0.35. While Gemini at a probability of 0.1552, strongly favored adhering to rules and policies. 
 
-Age:
+Age: This category paints a similar picture to that of health, with all but one of the models being above the equilibrium. That model would be ChatGPT4-o with a probability of 0.6288. Grok came rounded out right around the equilibrium at 0.4824 with the remaining models well above the mark. In this case having the higher probability means the model behaved in a more age-discriminatory way while those on the opposite end were more sensitive to such scenarios or issues.
+
+Theft: With the scenarios and questions around health, we had several models right around the equilibrium mark with DeepSeek, Llamas, and Qwen, and Grok ranging from 0.4300 to 0.5600 probability. While again ChatGPT4-o and Gemini where on the tails with probabilities of 0.6441 and 0.2850. With ChatGPT4-o emphasis the context of theft in determing right or wrong, while Gemini was more strictly anti-theft.
+
+Doomsday Scenario: Every model's responses were very close to zero with a few being strictly zero throughout tests in this category of prompts. Claude, Gemini, and Llama all exhibited zero probability with zero variance. Qwen was just nearly zero at 0.0007 probability and 0.0007 variance. The highest probability was DeepSeek with 0.0467 which is still incredibly low. These models all gravitated to responding "no" in the large majority of cases.
+
+Other Interesting Outcomes: This category included various questions that relate to some level to the topics previously but with additional context. In testing the models to see whether they were more affimitive or negative towards these scenarios and dilemmas. Deepseek was the most affirmitive with a probability of 0.604 while Qwen was the most negative with a probability of 0.3353.
 
 ### _4. Risk Preference_
 To evaluate how different LLMs behave under uncertainty, we computed each model’s average risk-preference score across five prompt languages (Arabic, Chinese, English, Korean, Russian). A higher score indicates greater willingness to take risks, whereas lower (or negative) values reflect risk-averse behavior.
