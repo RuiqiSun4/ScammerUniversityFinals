@@ -153,7 +153,7 @@ We added error bars to indicate the standard deviation of the models' responses 
 
 ### _3. Ethics_
 
-For this section, we employed a similar structure as we did in part 2 (Personalities). We measured the "yes" probability" for every question, averaged them by each of the 8 question categories, then utilized (https://streamlit.io/) to make an interactive dashboard to display & present the results. All probabilities were measures along with the standard deviation and variance.
+For this section, we employed a to part 2 (Personalities), we measured the "yes" probability" for every question, averaged them by each of the 8 question categories, then utilized (https://streamlit.io/) to make an interactive dashboard to display & present the results.
 
 ### _4. Risk Preference_
 To evaluate how large language models behave under uncertainty and probabilistic trade-offs, we designed a dedicated set of 20 binary decision-making questions.Each question presents a gamble, insurance scenario, investment choice, or risk-reward trade-off with explicitly stated probabilities.
@@ -248,15 +248,15 @@ We measured the **Average Variance** of responses across 50 iterations. A lower 
 
 | Language | Gemini | ChatGPT | Qwen | Claude | DeepSeek | Grok | Llama |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **ENG** | **0.002** | 0.011 | 0.016 | 0.020 | 0.025 | 0.038 | 0.056 |
-| **KOR** | **0.002** | 0.013 | 0.013 | 0.029 | 0.046 | 0.053 | 0.074 |
-| **CHN** | **0.001** | 0.024 | 0.018 | 0.019 | 0.041 | 0.056 | 0.065 |
-| **ARAB** | **0.015** | 0.028 | 0.024 | 0.020 | 0.046 | 0.035 | 0.072 |
-| **RUS** | **0.001** | 0.012 | 0.021 | 0.020 | 0.033 | 0.052 | 0.069 |
+| **ENG** | **0.002** | 0.011 | 0.016 | 0.020 | 0.025 | 0.038 | 0.067 |
+| **KOR** | **0.002** | 0.013 | 0.013 | 0.029 | 0.046 | 0.053 | 0.052 |
+| **CHN** | **0.001** | 0.024 | 0.018 | 0.019 | 0.041 | 0.056 | 0.053 |
+| **ARAB** | **0.015** | 0.028 | 0.024 | 0.020 | 0.046 | 0.035 | 0.076 |
+| **RUS** | **0.001** | 0.012 | 0.021 | 0.020 | 0.033 | 0.052 | 0.049 |
 
 
 1.  **Gemini (Most Consistent):** Maintained near-zero variance (~0.002) across most languages, with a slight exception in Arabic (0.015).
-2.  **Llama (Most Fluid):** Showed the highest variance (peaking at 0.074 in Korean), indicating less rigid alignment compared to commercial models.
+2.  **Llama (Most Fluid):** Showed the highest variance (peaking at 0.076 in Arab), indicating less rigid alignment compared to commercial models.
 3.  **Language Gap:** Higher variance in non-English languages highlights that **multilingual alignment remains a challenge** for AI consistency.
 
 You can view the full detailed analysis results in the link below:
@@ -272,12 +272,22 @@ You can view the full detailed analysis results in the link below:
 
 ### _2. Personalities_
 ### Model Comparison
-<img width="1059" height="690" alt="image" src="https://github.com/user-attachments/assets/c3143b06-f3a4-48ac-bdb6-5913a1e2d53d" />
+
+<p align="center">
+  <img src="analysis/personality/EI.png" width="49%">
+  <img src="analysis/personality/SN.png" width="49%">
+</p>
+
+<p align="center">
+  <img src="analysis/personality/TF.png" width="49%">
+  <img src="analysis/personality/JP.png" width="49%">
+</p>
 
 
-When comparing all 6 models(for every prompt language), the models' "personalities" were classified as below. 
 
-**1. ESTJ ("Efficient Organizer") : ChatGPT, DeepSeek**
+When comparing all 7 models(for every prompt language), the models' "personalities" were classified as below. 
+
+**1. ESTJ ("Efficient Organizer") : ChatGPT, DeepSeek, Llama**
 
 **2. ESFJ ("Supportive Contributer") : Gemini**
 
@@ -330,13 +340,7 @@ Race/Gender: For the first time in our analysis of the ethical categories, we ha
 
 Health: Our two categories of response here are rules/profit-focused and access-focused. Based on the trends we saw from the previous three categories of question, we expected the model to deliever similar results, but that was far from the case. The models all responsed above the equilibrium with ChatGPT-4o being the exception barely skating by with a probability of 0.4955. Whereas, for the other models, sat above that equilbrium with near identical results in pairs. Grok and Deepseek were both at ~0.45 probability while Claude, Llama, and Qwen ranged from ~0.33 to ~0.35. While Gemini at a probability of 0.1552, strongly favored adhering to rules and policies. 
 
-Age: This category paints a similar picture to that of health, with all but one of the models being above the equilibrium. That model would be ChatGPT4-o with a probability of 0.6288. Grok came rounded out right around the equilibrium at 0.4824 with the remaining models well above the mark. In this case having the higher probability means the model behaved in a more age-discriminatory way while those on the opposite end were more sensitive to such scenarios or issues.
-
-Theft: With the scenarios and questions around health, we had several models right around the equilibrium mark with DeepSeek, Llamas, and Qwen, and Grok ranging from 0.4300 to 0.5600 probability. While again ChatGPT4-o and Gemini where on the tails with probabilities of 0.6441 and 0.2850. With ChatGPT4-o emphasis the context of theft in determing right or wrong, while Gemini was more strictly anti-theft.
-
-Doomsday Scenario: Every model's responses were very close to zero with a few being strictly zero throughout tests in this category of prompts. Claude, Gemini, and Llama all exhibited zero probability with zero variance. Qwen was just nearly zero at 0.0007 probability and 0.0007 variance. The highest probability was DeepSeek with 0.0467 which is still incredibly low. These models all gravitated to responding "no" in the large majority of cases.
-
-Other Interesting Outcomes: This category included various questions that relate to some level to the topics previously but with additional context. In testing the models to see whether they were more affimitive or negative towards these scenarios and dilemmas. Deepseek was the most affirmitive with a probability of 0.604 while Qwen was the most negative with a probability of 0.3353.
+Age:
 
 ### _4. Risk Preference_
 To evaluate how different LLMs behave under uncertainty, we computed each model’s average risk-preference score across five prompt languages (Arabic, Chinese, English, Korean, Russian). A higher score indicates greater willingness to take risks, whereas lower (or negative) values reflect risk-averse behavior.
@@ -346,19 +350,16 @@ The bar chart reveals several clear tendencies:
 - Grok consistently shows the highest risk-seeking behavior across all languages, with scores approaching 0.90.
 - ChatGPT-4o and DeepSeek display moderate risk preference, remaining relatively stable across languages.
 - Claude and Gemini show overall lower risk tolerance, with Gemini being the most consistently risk-averse among frontier models.
-- Llama demonstrates highly unstable behavior, including a negative score under Arabic prompts, indicating strong risk aversion in that condition.
 
 (2) Cross-Language Comparison (Heatmap)
 The heatmap highlights heterogeneity introduced by the prompt language:
-- English prompts generally elevate risk-seeking behavior, especially for Grok, Llama, and DeepSeek.
-- Arabic prompts produce the largest variance, ranging from highly risk-seeking (Grok: 0.893) to risk-averse (Llama: –0.255).
+- English prompts generally elevate risk-seeking behavior, especially for Grok, Llama, and DeepSeek.  
 - Chinese, Korean, and Russian prompts produce more moderate and stable patterns, though Chinese often increases risk preference compared to Korean/Russian.
 - Gemini remains consistently conservative across all languages, reinforcing model-level tendencies rather than language sensitivity.
 
 Key Insights
 - Model architecture matters more than language: Grok, DeepSeek, and ChatGPT-4o tend to be more risk-seeking regardless of prompt language.
-- Language still shifts behavior: Arabic and English prompt conditions generate the strongest deviations—both positive and negative.
-- Llama is uniquely sensitive to language, suggesting instability in its decision-making under uncertainty.
+- Language still shifts behavior: Arabic and English prompt conditions generate the strongest deviations.
 
 #### Risk Preference Across Models and Languages
 ![Risk Preference Bar Chart](visualization/risk_preference_by_model_language.png)
@@ -370,17 +371,15 @@ To investigate whether a model’s risk preference is sensitive to the prompt la
 
 1. ChatGPT-4o
 - ChatGPT-4o exhibits moderate but consistent variance across languages.
-- Arabic prompts lead to the lowest risk-taking tendency (~0.60).
-- Chinese, English, Korean, Russian all cluster closely around 0.70–0.72, indicating a stable, moderately risk-seeking profile.
+- Arabic prompts lead to the lowest risk-taking tendency (~0.52).
+- Chinese, English, Korean, Russian all cluster closely around 0.70, indicating a stable, moderately risk-seeking profile.
 - Overall, ChatGPT-4o shows stable decision-making, with only mild sensitivity to language.
 2. Claude
-- Claude shows mild within-model variation, ranging approximately from 0.34 to 0.41.
-- English prompts yield the highest risk preference, while Korean yields the lowest.
+- English prompts yield the highest risk preference, while Arabic yields the lowest.
 - Despite some fluctuation, Claude remains relatively conservative compared to other models.
 3. DeepSeek
-- DeepSeek’s risk preference remains consistently high across languages (mostly 0.60–0.67).
-- Chinese and English prompts show the strongest inclination toward risk-taking.
-- DeepSeek appears robust and stable with minimal language-based variation.
+- DeepSeek’s risk preference remains consistently high across languages except for korean (mostly 0.55–0.76).
+- English prompts show the strongest inclination toward risk-taking.  
 4. Gemini
 - Gemini demonstrates slightly larger intra-model variation than Claude or DeepSeek.
 - Korean prompts generate the highest risk preference, while English prompts lead to the lowest (approx. 0.28).

@@ -1,15 +1,15 @@
 import json
 import csv
 import os
+import asyncio
 import numpy as np
-from openai import OpenAI
+from openai import AsyncOpenAI
 from dotenv import load_dotenv
-from concurrent.futures import ThreadPoolExecutor
 
 # 1. Configuration & Setup
 
 load_dotenv()
-client = OpenAI(
+client = AsyncOpenAI(
     api_key=os.getenv("DEEPINFRA_API_KEY"), 
     base_url="https://api.deepinfra.com/v1/openai"
 )
@@ -19,113 +19,134 @@ PROMPT_FILE_PATH = "prompts/prompts.json"
 OUTPUT_FILE_PATH = "artifacts/llama_results.csv"
 
 # Parameters for the experiment
-NUM_ROUNDS = 50       # Number of times to ask the same question
-MAX_WORKERS = 50      # Number of parallel threads (Controls speed)
+NUM_ROUNDS = 50
+MAX_CONCURRENT_REQUESTS = 50    
 
-# 2. Helper Functions (Logic)
-
-def force_yes_no(text):
+def force_yes_no(text: str) -> int:
     """
-    Parses the model's response text into a numerical value.
-    Returns:
-        1: If the response indicates 'Yes'
-        0: If the response indicates 'No'
-        -1: If the response is an error or uncertain
+    Parses the output. Returns 1 for Yes, 0 for No, -1 for Error.
+    Handles cases where the model might add punctuation like "Yes."
     """
-    text = text.strip().upper().replace(" ", "")
-    if text.startswith("YES") or "YES" in text: return 1
-    elif text.startswith("NO") or "NO" in text: return 0
-    elif text.startswith("Y"): return 1
-    elif text.startswith("N"): return 0
+    if not text:
+        return -1
+    
+    clean_text = text.strip().upper().replace(".", "").replace("*", "")
+    
+    if "YES" in clean_text:
+        return 1
+    elif "NO" in clean_text:
+        return 0
     return -1
 
-def ask_llama(data):
+async def get_answer_async(qid: str, question: str, constraint: str, round_id: int, semaphore: asyncio.Semaphore):
     """
-    Sends a single request to llama 3 (DeepInfra) and returns the parsed result.    
-    Args:
-        data (tuple): A tuple containing (question_text, constraint)
+    Async function to fetch a single answer.
+    Uses a semaphore to limit how many requests are active at once.
     """
-    question, constraint = data 
-    prompt = f"""{constraint}
+    async with semaphore:
+        messages = [
+            {"role": "system", "content": "You are a classifier. Output a single word: 'Yes' or 'No'. Do not think. Do not explain."},
+            {"role": "user", "content": f"{constraint}\n\nStatement: {question}\n\nAnswer with only 'Yes' or 'No' right now:"}
+        ]
 
-Statement: {question}
+        try:
+            completion = await client.chat.completions.create(
+                model=MODEL_NAME,
+                messages=messages,
+                max_tokens=5,    
+                temperature=1.0,
+                top_p=1.0,
+            )
+            raw = completion.choices[0].message.content
+            ans_code = force_yes_no(raw)
+            
+            print(f"Finished: Q{qid} - Round {round_id} -> {raw}")
+            return ans_code
 
-Answer with only "Yes" or "No" right now:"""
+        except Exception as e:
+            print(f"Error on Q{qid} Round {round_id}: {e}")
+            return -1
 
-    try:
-        completion = client.chat.completions.create(
-            model=MODEL_NAME,
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=2,
-            temperature=1.0, # Set to 1.0 to measure variance/uncertainty
-            top_p=1.0,
-        )
-        return force_yes_no(completion.choices[0].message.content)
-    except:
-        return -1
+async def main():
+    """
+    Execute the asynchronous batch-testing pipeline. and writes a CSV summary to OUTPUT_FILE_PATH.
+    """
+    print(f"Starting ASYNC batch test (Model: {MODEL_NAME} | Rounds: {NUM_ROUNDS})")
+    
+    if not os.path.exists(PROMPT_FILE_PATH):
+        print(f"File not found: {PROMPT_FILE_PATH}")
+        return
 
-# 3. Main Execution Flow
+    with open(PROMPT_FILE_PATH, "r", encoding="utf-8") as f:
+        prompts = json.load(f)
 
-print("▶ Start Processing...")
+    # Prepare Tasks
+    semaphore = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
+    tasks = []
+    task_map = [] 
 
-# Check if the prompt file exists
-if not os.path.exists(PROMPT_FILE_PATH):
-    print(f"Error: File not found at {PROMPT_FILE_PATH}")
-    exit()
+    for item in prompts:
+        for r in range(1, NUM_ROUNDS + 1):
+            tasks.append(get_answer_async(item["id"], item["question_text"], item["constraint"], r, semaphore))
+            task_map.append((item["id"], r))
 
-# Load the prompt data
-with open(PROMPT_FILE_PATH, "r", encoding="utf-8") as f:
-    prompts = json.load(f)
+    print(f"Queueing {len(tasks)} total requests...")
+    
+    # Gather and run all requests
+    raw_results = await asyncio.gather(*tasks)
 
-# Define CSV Headers
-headers = ["id", "question_text"] + \
-          [f"Round_{i}" for i in range(1, NUM_ROUNDS + 1)] + \
-          ["Yes_Probability", "Variance"]
+    # Organize Results
+    print("Processing results...")
+    
+    # Dictionary to hold results: {qid: [r1, r2, r3...]}
+    organized_data = {item["id"]: [None] * NUM_ROUNDS for item in prompts}
+    
+    for i, ans_code in enumerate(raw_results):
+        qid, round_num = task_map[i]
+        organized_data[qid][round_num - 1] = ans_code
 
-# Create and open the output CSV file
-with open(OUTPUT_FILE_PATH, "w", encoding="utf-8", newline="") as f:
-    writer = csv.DictWriter(f, fieldnames=headers)
-    writer.writeheader()
-
-    # Iterate through each question in the list
-    for i, item in enumerate(prompts):
-        print(f"Processing ({i+1}/{len(prompts)}): {item['id']}")
+    # Calculate Stats & Save
+    final_output = []
+    for item in prompts:
+        qid = item["id"]
+        answers = organized_data[qid]
         
-        # Prepare inputs for 50 repetitions of the same question
-        input_list = [(item["question_text"], item["constraint"])] * NUM_ROUNDS
+        # Filter valid answers (0 or 1)
+        valid_answers = [a for a in answers if a in (0, 1)]
         
-        """
-        Execute the 'ask_llama' function 50 times in parallel using ThreadPoolExecutor.
-        This allows 50 workers (threads) to send requests simultaneously,
-        significantly reducing the total wait time.
-        """
-
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            results = list(executor.map(ask_llama, input_list))
-        
-        # Calculate Statistics (Probability & Variance)
-        valid_results = [r for r in results if r != -1] # Filter out errors
-        
-        if valid_results:
-            prob = sum(valid_results) / len(valid_results)
-            var = np.var(valid_results)
+        if valid_answers:
+            yes_prob = sum(valid_answers) / len(valid_answers)
+            variance = np.var(valid_answers)
         else:
-            prob = 0.0
-            var = 0.0
-        
-        # Prepare the data row to save
+            yes_prob = 0
+            variance = 0
+
         row = {
-            "id": item["id"],
+            "id": qid,
+            "dimension": item.get("dimension", "N/A"),
             "question_text": item["question_text"],
-            "Yes_Probability": prob,
-            "Variance": var
+            "Yes_Probability": round(yes_prob, 4),
+            "Variance": round(variance, 4)
         }
         
-        # Add individual round results to the row
-        for idx, val in enumerate(results):
-            row[f"Round_{idx+1}"] = val
+        # Add individual round outputs
+        for r_idx, ans in enumerate(answers):
+            row[f"Round_{r_idx + 1}"] = ans
             
-        # Write the row to the CSV file immediately
-        writer.writerow(row)
+        final_output.append(row)
 
-print(f"▶ Done! Results saved to {OUTPUT_FILE_PATH}")
+    # Write CSV
+    fieldnames = ["id", "dimension", "question_text"] + \
+                 [f"Round_{i}" for i in range(1, NUM_ROUNDS + 1)] + \
+                 ["Yes_Probability", "Variance"]
+
+    os.makedirs(os.path.dirname(OUTPUT_FILE_PATH), exist_ok=True)
+    with open(OUTPUT_FILE_PATH, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(final_output)
+
+    print(f"\nDone! Results saved to {OUTPUT_FILE_PATH}")
+
+if __name__ == "__main__":
+    asyncio.run(main())

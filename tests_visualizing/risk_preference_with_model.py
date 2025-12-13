@@ -3,12 +3,17 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import os
+from dotenv import load_dotenv
 
-# Initialize client
-client = bigquery.Client()
+load_dotenv()
+GCP_PROJECT_ID = os.getenv("GCP_PROJECT_ID")
+BQ_DATASET = os.getenv("BQ_DATASET")
+BQ_TABLE = os.getenv("BQ_TABLE")
+client = bigquery.Client(project=GCP_PROJECT_ID)
+
 
 # Query to fetch risk preference scores
-query = """
+query = f"""
 SELECT
   model_source,
   prompt_language,
@@ -25,7 +30,9 @@ SELECT
       round_46 + round_47 + round_48 + round_49 + round_50
   ) / 50, 4) AS risk_score
 FROM
-  `scammeruniversity.model_comparison.Combined_table_for_analysis`
+  `{GCP_PROJECT_ID}.{BQ_DATASET}.{BQ_TABLE}`
+WHERE
+    id LIKE 'R_%'
 GROUP BY
   model_source, prompt_language
 ORDER BY
