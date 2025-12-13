@@ -61,6 +61,23 @@ Crafted very specific scenarios to foster responses from the models that they wo
 8. Other Interesting Outcomes: 
 These questions were more specific in nature, similar to our "Doomsday" questions, but centered around various situations that looked to expand upon our previous categories. Questions around AI overtaking sectors of industies, business exectutive decision making, as well as what kind of people one should befriend.
 
+**1.4. Risk Preference**
+
+We designed a structured set of questions to evaluate how Large Language Models respond to uncertainty and probabilistic decision-making. Unlike the political, ethical, or personality sections, this set focuses specifically on how each LLM behaves when faced with monetary risks, trade-offs, and uncertain outcomes.
+The risk-preference prompt set covers a diverse range of classic scenarios used in behavioral economics, including:
+
+1. Low-probability high-reward lotteries  
+2. Investment decisions with asymmetric gains and losses  
+3. Insurance choices involving protection vs. cost  
+4. Job and income uncertainty trade-offs  
+5. Medical decisions involving benefits vs. side effects  
+6. Gambling scenarios with explicitly stated probabilities  
+7. Loss-recovery decisions (risk-seeking after experiencing losses)
+
+Each question explicitly specifies numerical probabilities so that models must rely on their internal reasoning about expected value, loss aversion, and risk tolerance.
+
+All responses were collected in a binary format (“yes” = 1, “no” = 0), allowing us to compute the average yes-probability as a direct quantitative measure of a model’s tendency toward either risk-seeking or risk-averse behavior.
+
 ### _2. Limitation of Data_
 
 This study tested only five languages (English, Chinese, Korean, Russian, and Arabic), which may not fully capture the diversity of linguistic contexts.
@@ -125,6 +142,24 @@ We filtered Dimension (E vs I, S vs N, ...), Model (Claude, Gemini, ...) and Inp
 
 We added error bars to indicate the standard deviation of the models' responses for every round (total 50 rounds). 
 
+### _4. Risk Preference_
+To evaluate how large language models behave under uncertainty and probabilistic trade-offs, we designed a dedicated set of 20 binary decision-making questions.Each question presents a gamble, insurance scenario, investment choice, or risk-reward trade-off with explicitly stated probabilities.
+As with the other categories (Politics, Personality, Ethics), each question was asked 50 independent times.
+For each question, we computed:
+- the probability that the model answers “Yes” (=1)
+- the probability of “No” (=0)
+- errors / refusals treated as -1 (very rare for this category)
+We conducted two levels of analysis:
+(a) Cross-model & cross-language comparison
+We averaged the “yes-probability” for each model–language combination and visualized:
+- a bar chart showing risk preference tendencies across all seven LLMs and six languages
+- a heatmap summarizing model-language differences in a compact form
+These visualizations highlight how the same question can elicit more risk-averse or more risk-seeking behaviors depending on both the LLM architecture and the prompt language.
+
+(b) Within-model language comparison
+To examine linguistic effects more directly, we created per-model visualizations, where each figure compares the six prompt languages for a single model.
+This allows us to observe whether a given LLM (e.g., ChatGPT-4o, Gemini, Llama, DeepSeek, Qwen, etc.) becomes systematically more risk-averse or risk-seeking when answering in different language.
+These plots reveal how language framing influences a model’s decision boundary even when the underlying architecture remains constant.
 
 
 ### _5. Statistical Testing_
