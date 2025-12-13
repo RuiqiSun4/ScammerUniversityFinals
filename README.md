@@ -262,7 +262,7 @@ This type of discrepancy is not shown in any other models.
 
 
 ### _3._ Ethics 
-
+Model Comparison
 <p align="center">
   <img src="analysis/ethics/charts/Lying - Graph.png" width="49%">
   <img src="analysis/ethics/charts/Animals:Environment - Graph.png" width="49%">
@@ -282,6 +282,16 @@ This type of discrepancy is not shown in any other models.
   <img src="analysis/ethics/charts/Doomsday Scenario - Graph.png" width="49%">
   <img src="analysis/ethics/charts/Other Interesting Outcomes - Graph.png" width="49%">
 </p>
+
+Lying: The majority of models are permissive of lying when given certain scenarios or circumstances, particularly, when presented between choosing "for the greater good" or otherwise. Gemini was the only model that exhibited tendencies of being strictly honest, but even then, Gemini's responses only slightly favored honest with at a probability of 0.5244. ChatGPT-4o exhibited the greatest probability of being permissive of lying with a probability of 0.9109. 
+
+Animals/Environment: With this category of prompts, we see the model's distribution in a very similar fashion to what we saw with lying. Gemini again, was the only model who's responses were above the equilibrium, which in this case favors human advancement and organizational profits at a probability of 0.5840. ChatGPT4-o fell on the opposite end of the extreme with greatly prioritizes the rights of the environment and animals at a probability of 0.9262. Generally, AI models favor the rights of the environment and animals. 
+
+Race/Gender: For the first time in our analysis of the ethical categories, we have a similar probability distribution. All the model's were more sensitive to areas of potential inequality with probabilities between ~0.6 and ~0.8. Deepseek and Qwen exhibited nearly identical probabilites of 0.7684 and 0.7592. ChatGPT4-o was the most sensitive to these issues with a probability of 0.8144 and Grok on the other end of the spectrum exhibited a probability of 0.6012.
+
+Health: Our two categories of response here are rules/profit-focused and access-focused. Based on the trends we saw from the previous three categories of question, we expected the model to deliever similar results, but that was far from the case. The models all responsed above the equilibrium with ChatGPT-4o being the exception barely skating by with a probability of 0.4955. Whereas, for the other models, sat above that equilbrium with near identical results in pairs. Grok and Deepseek were both at ~0.45 probability while Claude, Llama, and Qwen ranged from ~0.33 to ~0.35. While Gemini at a probability of 0.1552, strongly favored adhering to rules and policies. 
+
+Age:
 
 ### _4._
 
